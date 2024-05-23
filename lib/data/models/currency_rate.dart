@@ -5,12 +5,12 @@ part 'currency_rate.g.dart';
 @JsonSerializable()
 class CurrencyRate {
   int id;
-  String code;
+  int code;
   String currency;
   String currencyName;
   String date;
-  String rate;
-  String difference;
+  double rate;
+  double difference;
 
   CurrencyRate(this.id, this.code, this.currency, this.currencyName, this.date,
       this.rate, this.difference);

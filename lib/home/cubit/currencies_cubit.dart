@@ -8,8 +8,14 @@ part 'currencies_state.dart';
 class CurrenciesCubit extends Cubit<CurrenciesState> {
   CurrenciesCubit() : super(CurrenciesInitial());
 
-  void fetchData() async {
-    final currencies = await ApiHelper.fetchCurrencies();
-    print(currencies!.first.currency);
+  void fetchData(DateTime date) async {
+    try {
+      final currencies = await ApiHelper.fetchCurrencies(date: date);
+      if (currencies != null) {
+        emit(CurrenciesDataFetched(currencies));
+      }
+    } catch (e) {
+      emit(CurrenciesError(e.toString()));
+    }
   }
 }
