@@ -17,27 +17,66 @@ class _CurrenciesScreenState extends State<CurrenciesScreen> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12),
-      child: BlocProvider(
-        create: (context) => CurrenciesCubit(),
-        child: BlocBuilder<CurrenciesCubit, CurrenciesState>(
-          builder: (context, state) {
-            if (state is CurrenciesInitial) {
-              BlocProvider.of<CurrenciesCubit>(context)
-                  .fetchData(DateTime.now());
-              return const Center(
-                child: CircularProgressIndicator.adaptive(),
-              );
-            } else if (state is CurrenciesDataFetched) {
-              return ListView.builder(
-                itemCount: state.currencies.length,
-                itemBuilder: (context, index) {
-                  return CurrencyItem(currencyItem: state.currencies[index]);
-                },
-              );
-            }
-            return Text("letsgo");
-          },
-        ),
+      child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                        width: 2,
+                        color: Theme.of(context).colorScheme.onBackground))),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  "Currency",
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
+                ),
+                Text(
+                  "Rate",
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
+                ),
+                Text(
+                  "Diff",
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          BlocProvider(
+            create: (context) => CurrenciesCubit(),
+            child: BlocBuilder<CurrenciesCubit, CurrenciesState>(
+              builder: (context, state) {
+                if (state is CurrenciesInitial) {
+                  BlocProvider.of<CurrenciesCubit>(context)
+                      .fetchData(DateTime.now());
+                  return const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  );
+                } else if (state is CurrenciesDataFetched) {
+                  return Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: state.currencies.length,
+                      itemBuilder: (context, index) {
+                        return CurrencyItem(
+                            currencyItem: state.currencies[index]);
+                      },
+                    ),
+                  );
+                }
+                return Text("letsgo");
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
