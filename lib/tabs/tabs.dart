@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uzb_currency/calculator/calculator_screen.dart';
+import 'package:uzb_currency/home/currencies_screen.dart';
 import 'package:uzb_currency/tabs/cubit/tabs_cubit.dart';
 
 // Main screen that handles navigation between different tabs
@@ -36,7 +38,10 @@ class _TabsScreenState extends State<TabsScreen> {
           if (state is TabsInitial) {
             return IndexedStack(
               index: selectedTab,
-              children: [],
+              children: const [
+                CurrenciesScreen(),
+                CalculatorScreen(),
+              ],
             );
           } else if (state is TabsError) {
             return Center(
