@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 class CalculatorButton extends StatelessWidget {
   const CalculatorButton(
-      {super.key, required this.value, required this.pressed});
+      {super.key, required this.value, required this.onPress, this.onHolded});
 
   final dynamic value;
-  final ValueChanged<dynamic> pressed;
+  final ValueChanged<dynamic> onPress;
+  final ValueChanged<dynamic>? onHolded;
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +14,13 @@ class CalculatorButton extends StatelessWidget {
     return TextButton(
       style: OutlinedButton.styleFrom(
           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-          minimumSize: Size((screenSize.width / 3) - 8, screenSize.width / 5)),
+          minimumSize:
+              Size((screenSize.width / 3) - 8, screenSize.height / 12)),
       onPressed: () {
-        pressed(value);
+        onPress(value);
+      },
+      onLongPress: () {
+        onHolded == null ? null : onHolded!(dynamic);
       },
       child: value is String
           ? Text(

@@ -33,6 +33,7 @@ class CurrenciesCubit extends Cubit<CurrenciesState> {
           : List.generate(
               currencies!.length, (index) => currencies![index].currency),
       theme: CurrencyPickerThemeData(
+        bottomSheetHeight: MediaQuery.of(context).size.height / 1.5,
         currencySignTextStyle: const TextStyle().copyWith(
           color: Theme.of(context).colorScheme.secondary,
         ),
