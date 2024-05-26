@@ -45,6 +45,9 @@ dependencies:
   built_value: ^8.9.2
   http: ^1.2.1
   circle_flags: ^5.0.0
+  currency_picker: ^2.0.21
+  meta: ^1.11.0
+  equatable: ^2.0.5
 
 dev_dependencies:
   flutter_test:

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:uzb_currency/home/cubit/currencies_cubit.dart';
 import 'package:uzb_currency/tabs/cubit/tabs_cubit.dart';
-import 'package:uzb_currency/tabs/tabs.dart';
+import 'package:uzb_currency/tabs/tabs_screen.dart';
 
 // Theme for the light mode
 final lightTheme = ThemeData(
@@ -41,8 +42,15 @@ class App extends StatelessWidget {
     return MaterialApp(
         theme: lightTheme, // Applying the light theme
         darkTheme: darkTheme, // Applying the dark theme
-        home: BlocProvider(
-          create: (context) => TabsCubit(),
+        home: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => TabsCubit(),
+            ),
+            BlocProvider(
+              create: (context) => CurrenciesCubit(),
+            ),
+          ],
           child: const TabsScreen(),
         ));
   }
