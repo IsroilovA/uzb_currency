@@ -1,5 +1,4 @@
 import 'package:circle_flags/circle_flags.dart';
-import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -20,7 +19,7 @@ class CalculatorScreen extends StatefulWidget {
 class _CalculatorScreenState extends State<CalculatorScreen> {
   String inputAmount = '';
   String convertedAmount = '0';
-  Currency? selectedCurency;
+  String selectedCurency = 'USD';
   double selectedCurrencyRate = 0.0;
   bool isReversed = false;
   @override
@@ -93,22 +92,17 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                                 BlocProvider.of<CurrenciesCubit>(context)
                                     .showPicker((currency) {
                                   setState(() {
-                                    selectedCurency = currency;
+                                    selectedCurency = currency.code;
                                   });
                                 }, context);
                               },
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  selectedCurency == null
-                                      ? CircleFlag('uz')
-                                      : CircleFlag(selectedCurency!.code
-                                          .substring(0, 2)),
+                                  CircleFlag(selectedCurency.substring(0, 2)),
                                   const SizedBox(width: 8),
                                   Text(
-                                    selectedCurency == null
-                                        ? 'UZS'
-                                        : selectedCurency!.code,
+                                    selectedCurency,
                                     style: Theme.of(coninputAmount)
                                         .textTheme
                                         .titleLarge!
@@ -134,20 +128,17 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                                 },
                                 builder: (context, state) {
                                   if (state is CurrenciesDataFetched) {
-                                    if (selectedCurency != null) {
-                                      selectedCurrencyRate = state.currencies
-                                          .firstWhere((element) =>
-                                              element.currency ==
-                                              selectedCurency!.code)
-                                          .rate;
-                                      if (inputAmount.isNotEmpty) {
-                                        convertedAmount =
-                                            (double.parse(inputAmount) /
-                                                    selectedCurrencyRate)
-                                                .toStringAsFixed(2);
-                                      } else {
-                                        convertedAmount = '0.0';
-                                      }
+                                    selectedCurrencyRate = state.currencies
+                                        .firstWhere((element) =>
+                                            element.currency == selectedCurency)
+                                        .rate;
+                                    if (inputAmount.isNotEmpty) {
+                                      convertedAmount =
+                                          (double.parse(inputAmount) /
+                                                  selectedCurrencyRate)
+                                              .toStringAsFixed(2);
+                                    } else {
+                                      convertedAmount = '0.0';
                                     }
                                     return Text(
                                       softWrap: true,
