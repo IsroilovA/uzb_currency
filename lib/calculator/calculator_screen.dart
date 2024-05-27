@@ -18,7 +18,7 @@ class CalculatorScreen extends StatefulWidget {
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
   String inputAmount = '';
-  String convertedAmount = '0';
+  double convertedAmount = 0;
   String selectedCurency1 = 'USD';
   String selectedCurency2 = 'UZS';
   double selectedCurrencyRate1 = 0.0;
@@ -92,7 +92,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                                   }
                                   return Text(
                                     softWrap: true,
-                                    insertCommas(inputAmount),
+                                    inputAmount.isEmpty
+                                        ? currencyFormatter.format(0)
+                                        : currencyFormatter
+                                            .format(double.parse(inputAmount)),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineLarge!
@@ -174,16 +177,15 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                                   }
                                   if (inputAmount.isNotEmpty) {
                                     convertedAmount =
-                                        (double.parse(inputAmount) *
-                                                selectedCurrencyRate1 /
-                                                selectedCurrencyRate2)
-                                            .toStringAsFixed(2);
+                                        double.parse(inputAmount) *
+                                            selectedCurrencyRate1 /
+                                            selectedCurrencyRate2;
                                   } else {
-                                    convertedAmount = '0.0';
+                                    convertedAmount = 0;
                                   }
                                   return Text(
                                     softWrap: true,
-                                    insertCommas(convertedAmount),
+                                    currencyFormatter.format(convertedAmount),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineLarge!
