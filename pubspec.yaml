@@ -45,7 +45,10 @@ dependencies:
   built_value: ^8.9.2
   http: ^1.2.1
   circle_flags: ^5.0.0
-  currency_picker: ^2.0.21
+  currency_picker: 
+    git: 
+      url: https://github.com/IsroilovA/flutter_currency_picker.git
+      ref: patch-1
   meta: ^1.11.0
   equatable: ^2.0.5
 

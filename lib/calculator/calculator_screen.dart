@@ -19,11 +19,13 @@ class CalculatorScreen extends StatefulWidget {
 class _CalculatorScreenState extends State<CalculatorScreen> {
   String inputAmount = '';
   String convertedAmount = '0';
-  String selectedCurency = 'USD';
-  double selectedCurrencyRate = 0.0;
+  String selectedCurency1 = 'USD';
+  String selectedCurency2 = 'UZS';
+  double selectedCurrencyRate1 = 0.0;
+  double selectedCurrencyRate2 = 0.0;
   bool isReversed = false;
   @override
-  Widget build(BuildContext coninputAmount) {
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Column(
@@ -41,34 +43,70 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                CircleFlag('uz'),
-                                const SizedBox(width: 8),
-                                Text(
-                                  "UZS",
-                                  style: Theme.of(coninputAmount)
-                                      .textTheme
-                                      .titleLarge!
-                                      .copyWith(
-                                          color: Theme.of(coninputAmount)
-                                              .colorScheme
-                                              .onBackground),
-                                ),
-                              ],
+                            InkWell(
+                              onTap: () {
+                                BlocProvider.of<CurrenciesCubit>(context)
+                                    .showPicker((currency) {
+                                  setState(() {
+                                    selectedCurency1 = currency.code;
+                                  });
+                                }, context);
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CircleFlag(selectedCurency1.substring(0, 2)),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    selectedCurency1,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground),
+                                  ),
+                                ],
+                              ),
                             ),
                             const SizedBox(height: 15),
-                            Text(
-                              softWrap: true,
-                              insertCommas(inputAmount),
-                              style: Theme.of(coninputAmount)
-                                  .textTheme
-                                  .headlineLarge!
-                                  .copyWith(
-                                      color: Theme.of(coninputAmount)
-                                          .colorScheme
-                                          .onBackground),
+                            BlocBuilder<CurrenciesCubit, CurrenciesState>(
+                              buildWhen: (previous, current) {
+                                if (current is CurrenciesDataFetched) {
+                                  return true;
+                                } else {
+                                  return false;
+                                }
+                              },
+                              builder: (context, state) {
+                                if (state is CurrenciesDataFetched) {
+                                  if (selectedCurency1 == 'UZS') {
+                                    selectedCurrencyRate1 = 1;
+                                  } else {
+                                    selectedCurrencyRate1 = state.currencies
+                                        .firstWhere((element) =>
+                                            element.currency ==
+                                            selectedCurency1)
+                                        .rate;
+                                  }
+                                  return Text(
+                                    softWrap: true,
+                                    insertCommas(inputAmount),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineLarge!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground),
+                                  );
+                                } else {
+                                  return const Center(
+                                      child:
+                                          CircularProgressIndicator.adaptive());
+                                }
+                              },
                             ),
                           ],
                         ),
@@ -92,22 +130,22 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                                 BlocProvider.of<CurrenciesCubit>(context)
                                     .showPicker((currency) {
                                   setState(() {
-                                    selectedCurency = currency.code;
+                                    selectedCurency2 = currency.code;
                                   });
                                 }, context);
                               },
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  CircleFlag(selectedCurency.substring(0, 2)),
+                                  CircleFlag(selectedCurency2.substring(0, 2)),
                                   const SizedBox(width: 8),
                                   Text(
-                                    selectedCurency,
-                                    style: Theme.of(coninputAmount)
+                                    selectedCurency2,
+                                    style: Theme.of(context)
                                         .textTheme
                                         .titleLarge!
                                         .copyWith(
-                                            color: Theme.of(coninputAmount)
+                                            color: Theme.of(context)
                                                 .colorScheme
                                                 .onBackground),
                                   ),
@@ -115,56 +153,51 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                               ),
                             ),
                             const SizedBox(height: 15),
-                            BlocProvider(
-                              create: (context) => CurrenciesCubit(),
-                              child:
-                                  BlocBuilder<CurrenciesCubit, CurrenciesState>(
-                                buildWhen: (previous, current) {
-                                  if (current is CurrenciesDataFetched) {
-                                    return true;
+                            BlocBuilder<CurrenciesCubit, CurrenciesState>(
+                              buildWhen: (previous, current) {
+                                if (current is CurrenciesDataFetched) {
+                                  return true;
+                                } else {
+                                  return false;
+                                }
+                              },
+                              builder: (context, state) {
+                                if (state is CurrenciesDataFetched) {
+                                  if (selectedCurency2 == 'UZS') {
+                                    selectedCurrencyRate2 = 1;
                                   } else {
-                                    return false;
-                                  }
-                                },
-                                builder: (context, state) {
-                                  if (state is CurrenciesDataFetched) {
-                                    selectedCurrencyRate = state.currencies
+                                    selectedCurrencyRate2 = state.currencies
                                         .firstWhere((element) =>
-                                            element.currency == selectedCurency)
+                                            element.currency ==
+                                            selectedCurency2)
                                         .rate;
-                                    if (inputAmount.isNotEmpty) {
-                                      convertedAmount =
-                                          (double.parse(inputAmount) /
-                                                  selectedCurrencyRate)
-                                              .toStringAsFixed(2);
-                                    } else {
-                                      convertedAmount = '0.0';
-                                    }
-                                    return Text(
-                                      softWrap: true,
-                                      insertCommas(convertedAmount),
-                                      style: Theme.of(coninputAmount)
-                                          .textTheme
-                                          .headlineLarge!
-                                          .copyWith(
-                                              color: Theme.of(coninputAmount)
-                                                  .colorScheme
-                                                  .onBackground),
-                                    );
-                                  } else if (state is CurrenciesInitial) {
-                                    BlocProvider.of<CurrenciesCubit>(context)
-                                        .fetchData(DateTime.now());
-                                    return const Center(
-                                      child:
-                                          CircularProgressIndicator.adaptive(),
-                                    );
-                                  } else {
-                                    return const Center(
-                                        child: CircularProgressIndicator
-                                            .adaptive());
                                   }
-                                },
-                              ),
+                                  if (inputAmount.isNotEmpty) {
+                                    convertedAmount =
+                                        (double.parse(inputAmount) *
+                                                selectedCurrencyRate1 /
+                                                selectedCurrencyRate2)
+                                            .toStringAsFixed(2);
+                                  } else {
+                                    convertedAmount = '0.0';
+                                  }
+                                  return Text(
+                                    softWrap: true,
+                                    insertCommas(convertedAmount),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineLarge!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground),
+                                  );
+                                } else {
+                                  return const Center(
+                                      child:
+                                          CircularProgressIndicator.adaptive());
+                                }
+                              },
                             ),
                           ],
                         ),

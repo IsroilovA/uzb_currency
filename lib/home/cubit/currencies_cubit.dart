@@ -28,10 +28,14 @@ class CurrenciesCubit extends Cubit<CurrenciesState> {
     BuildContext context,
   ) {
     showCurrencyPicker(
+      favorite: ['UZS', 'USD', 'EUR', 'RUB'],
       currencyFilter: currencies == null
           ? null
           : List.generate(
-              currencies!.length, (index) => currencies![index].currency),
+              currencies!.length + 1,
+              (index) => index == currencies!.length
+                  ? 'UZS'
+                  : currencies![index].currency),
       theme: CurrencyPickerThemeData(
         bottomSheetHeight: MediaQuery.of(context).size.height / 1.5,
         currencySignTextStyle: const TextStyle().copyWith(
