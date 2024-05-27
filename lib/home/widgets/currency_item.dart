@@ -34,13 +34,13 @@ class CurrencyItem extends StatelessWidget {
               ],
             ),
             Text(
-              currencyFormatter.format(currencyItem.rate),
+              currencyFormat(currencyItem.rate.toString()),
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     color: Theme.of(context).colorScheme.onBackground,
                   ),
             ),
             Text(
-              currencyFormatter.format(currencyItem.difference),
+              currencyFormat(currencyItem.difference.toString()),
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     color:
                         currencyItem.difference < 0 ? Colors.red : Colors.green,

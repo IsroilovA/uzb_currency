@@ -54,22 +54,23 @@ class OutputCurrencyCard extends StatelessWidget {
               },
               builder: (context, state) {
                 if (state is CurrenciesDataFetched) {
-                  double rateCurrencyConvertedFrom = 0.0;
-                  double rateCurrencyConvertedTo = 0.0;
-                  double convertedAmount = 0.0;
+                  double rateCurrencyConvertedFrom = 0;
+                  double rateCurrencyConvertedTo = 0;
+                  double convertedAmount = 0;
                   if (currencyConvertedFrom == 'UZS') {
                     rateCurrencyConvertedFrom = 1;
                   } else {
                     rateCurrencyConvertedFrom = state.currencies
-                        .firstWhere(
-                            (element) => element.currency == currencyConvertedFrom)
+                        .firstWhere((element) =>
+                            element.currency == currencyConvertedFrom)
                         .rate;
                   }
                   if (currencyConvertedTo == 'UZS') {
                     rateCurrencyConvertedTo = 1;
                   } else {
                     rateCurrencyConvertedTo = state.currencies
-                        .firstWhere((element) => element.currency == currencyConvertedTo)
+                        .firstWhere((element) =>
+                            element.currency == currencyConvertedTo)
                         .rate;
                   }
                   if (inputAmount.isNotEmpty) {
@@ -81,7 +82,7 @@ class OutputCurrencyCard extends StatelessWidget {
                   }
                   return Text(
                     softWrap: true,
-                    currencyFormatter.format(convertedAmount),
+                    currencyFormat(convertedAmount.toString()),
                     style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                         color: Theme.of(context).colorScheme.onBackground),
                   );

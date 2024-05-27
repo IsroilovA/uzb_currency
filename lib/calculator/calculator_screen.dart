@@ -28,7 +28,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           mainAxisSize: MainAxisSize.max,
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height / 2.3,
+              height: MediaQuery.of(context).size.height / 2.1,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -112,10 +112,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 value: '.',
                 onPress: (value) {
                   setState(() {
-                    if (inputAmount == '') {
-                      inputAmount = "${inputAmount}0$value";
-                    } else {
-                      inputAmount = inputAmount + value;
+                    if (!inputAmount.contains('.')) {
+                      if (inputAmount == '') {
+                        inputAmount = "${inputAmount}0$value";
+                      } else {
+                        inputAmount = inputAmount + value;
+                      }
                     }
                   });
                 }),

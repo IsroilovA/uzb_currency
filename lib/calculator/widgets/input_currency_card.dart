@@ -45,53 +45,13 @@ class InputCurrencyCard extends StatelessWidget {
             Text(
               softWrap: true,
               inputAmount.isEmpty
-                  ? currencyFormatter.format(0)
-                  : currencyFormatter.format(double.parse(inputAmount)),
+                  ? currencyFormat(0.toString())
+                  : currencyFormat(inputAmount),
               style: Theme.of(context)
                   .textTheme
                   .headlineLarge!
                   .copyWith(color: Theme.of(context).colorScheme.onBackground),
             ),
-            // BlocBuilder<CurrenciesCubit, CurrenciesState>(
-            //   buildWhen: (previous, current) {
-            //     if (current is CurrenciesDataFetched) {
-            //       return true;
-            //     } else {
-            //       return false;
-            //     }
-            //   },
-            //   builder: (context, state) {
-            //     if (state is CurrenciesDataFetched) {
-            //       if (currency == 'UZS') {
-            //         selectedCurrencyRate1 = 1;
-            //       } else {
-            //         selectedCurrencyRate1 = state.currencies
-            //             .firstWhere((element) =>
-            //                 element.currency ==
-            //                 selectedCurency1)
-            //             .rate;
-            //       }
-            //       return Text(
-            //         softWrap: true,
-            //         inputAmount.isEmpty
-            //             ? currencyFormatter.format(0)
-            //             : currencyFormatter
-            //                 .format(double.parse(inputAmount)),
-            //         style: Theme.of(context)
-            //             .textTheme
-            //             .headlineLarge!
-            //             .copyWith(
-            //                 color: Theme.of(context)
-            //                     .colorScheme
-            //                     .onBackground),
-            //       );
-            //     } else {
-            //       return const Center(
-            //           child:
-            //               CircularProgressIndicator.adaptive());
-            //     }
-            //   },
-            // ),
           ],
         ),
       ),
