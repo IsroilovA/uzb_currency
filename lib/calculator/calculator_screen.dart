@@ -1,11 +1,7 @@
-import 'package:circle_flags/circle_flags.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uzb_currency/calculator/widgets/calculator_button.dart';
-import 'package:uzb_currency/home/cubit/currencies_cubit.dart';
-import 'package:uzb_currency/service/helper_functions.dart';
+import 'package:uzb_currency/calculator/widgets/input_currency_card.dart';
+import 'package:uzb_currency/calculator/widgets/output_currency_card.dart';
 
 class CalculatorScreen extends StatefulWidget {
   const CalculatorScreen({super.key});
@@ -17,13 +13,12 @@ class CalculatorScreen extends StatefulWidget {
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
+  //variable to hold the value user entered
   String inputAmount = '';
-  double convertedAmount = 0;
-  String selectedCurency1 = 'USD';
-  String selectedCurency2 = 'UZS';
-  double selectedCurrencyRate1 = 0.0;
-  double selectedCurrencyRate2 = 0.0;
-  bool isReversed = false;
+  //variable to hold currency from which convert
+  String curencyConvertedFrom = 'USD';
+  //variable to hold currency to which convert
+  String curencyConvertedTo = 'UZS';
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -37,83 +32,14 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                BlocProvider.of<CurrenciesCubit>(context)
-                                    .showPicker((currency) {
-                                  setState(() {
-                                    selectedCurency1 = currency.code;
-                                  });
-                                }, context);
-                              },
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CircleFlag(selectedCurency1.substring(0, 2)),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    selectedCurency1,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge!
-                                        .copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onBackground),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 15),
-                            BlocBuilder<CurrenciesCubit, CurrenciesState>(
-                              buildWhen: (previous, current) {
-                                if (current is CurrenciesDataFetched) {
-                                  return true;
-                                } else {
-                                  return false;
-                                }
-                              },
-                              builder: (context, state) {
-                                if (state is CurrenciesDataFetched) {
-                                  if (selectedCurency1 == 'UZS') {
-                                    selectedCurrencyRate1 = 1;
-                                  } else {
-                                    selectedCurrencyRate1 = state.currencies
-                                        .firstWhere((element) =>
-                                            element.currency ==
-                                            selectedCurency1)
-                                        .rate;
-                                  }
-                                  return Text(
-                                    softWrap: true,
-                                    inputAmount.isEmpty
-                                        ? currencyFormatter.format(0)
-                                        : currencyFormatter
-                                            .format(double.parse(inputAmount)),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineLarge!
-                                        .copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onBackground),
-                                  );
-                                } else {
-                                  return const Center(
-                                      child:
-                                          CircularProgressIndicator.adaptive());
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
+                    InputCurrencyCard(
+                      onCurrencyChanged: (currency) {
+                        setState(() {
+                          curencyConvertedFrom = currency;
+                        });
+                      },
+                      currency: curencyConvertedFrom,
+                      inputAmount: inputAmount,
                     ),
                     IconButton(
                       onPressed: () {},
@@ -122,88 +48,15 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                         size: 50,
                       ),
                     ),
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                BlocProvider.of<CurrenciesCubit>(context)
-                                    .showPicker((currency) {
-                                  setState(() {
-                                    selectedCurency2 = currency.code;
-                                  });
-                                }, context);
-                              },
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CircleFlag(selectedCurency2.substring(0, 2)),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    selectedCurency2,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge!
-                                        .copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onBackground),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 15),
-                            BlocBuilder<CurrenciesCubit, CurrenciesState>(
-                              buildWhen: (previous, current) {
-                                if (current is CurrenciesDataFetched) {
-                                  return true;
-                                } else {
-                                  return false;
-                                }
-                              },
-                              builder: (context, state) {
-                                if (state is CurrenciesDataFetched) {
-                                  if (selectedCurency2 == 'UZS') {
-                                    selectedCurrencyRate2 = 1;
-                                  } else {
-                                    selectedCurrencyRate2 = state.currencies
-                                        .firstWhere((element) =>
-                                            element.currency ==
-                                            selectedCurency2)
-                                        .rate;
-                                  }
-                                  if (inputAmount.isNotEmpty) {
-                                    convertedAmount =
-                                        double.parse(inputAmount) *
-                                            selectedCurrencyRate1 /
-                                            selectedCurrencyRate2;
-                                  } else {
-                                    convertedAmount = 0;
-                                  }
-                                  return Text(
-                                    softWrap: true,
-                                    currencyFormatter.format(convertedAmount),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineLarge!
-                                        .copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onBackground),
-                                  );
-                                } else {
-                                  return const Center(
-                                      child:
-                                          CircularProgressIndicator.adaptive());
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
+                    OutputCurrencyCard(
+                      onCurrencyChanged: (currency) {
+                        setState(() {
+                          curencyConvertedTo = currency;
+                        });
+                      },
+                      currencyConvertedFrom: curencyConvertedFrom,
+                      inputAmount: inputAmount,
+                      currencyConvertedTo: curencyConvertedTo,
                     ),
                   ],
                 ),
@@ -214,6 +67,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     );
   }
 
+  //function to build keyboard
   List<Widget> customKeyboard() {
     return List.generate(
       4,
