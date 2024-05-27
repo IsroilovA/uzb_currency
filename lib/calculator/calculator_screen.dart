@@ -15,9 +15,9 @@ class CalculatorScreen extends StatefulWidget {
 class _CalculatorScreenState extends State<CalculatorScreen> {
   //variable to hold the value user entered
   String inputAmount = '';
-  //variable to hold currency from which convert
+  //variable to hold currency from which convert, default usd
   String curencyConvertedFrom = 'USD';
-  //variable to hold currency to which convert
+  //variable to hold currency to which convert, default uzs
   String curencyConvertedTo = 'UZS';
   @override
   Widget build(BuildContext context) {
@@ -28,6 +28,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           mainAxisSize: MainAxisSize.max,
           children: [
             Expanded(
+              // to make it scrollable when it grows
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -67,6 +68,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 ),
               ),
             ),
+            //keyboard
             ...customKeyboard()
           ]),
     );
