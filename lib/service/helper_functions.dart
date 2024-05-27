@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 // Date formatter for year-month-day format
 final dateFormatter = DateFormat('yyyy-MM-dd');
 
-// Helper function to insert commas into a numerical string
+// Helper function to format strings into a numerical string
 String currencyFormat(String text) {
   String newText = '';
   int indexOfDot = text.indexOf('.');
