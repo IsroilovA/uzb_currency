@@ -42,7 +42,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       inputAmount: inputAmount,
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        final temp = curencyConvertedFrom;
+                        setState(() {
+                          curencyConvertedFrom = curencyConvertedTo;
+                          curencyConvertedTo = temp;
+                        });
+                      },
                       icon: const Icon(
                         Icons.swap_vert,
                         size: 50,
