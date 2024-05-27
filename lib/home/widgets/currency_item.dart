@@ -1,4 +1,4 @@
-import 'package:circle_flags/circle_flags.dart';
+import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:uzb_currency/data/models/currency_rate.dart';
 import 'package:uzb_currency/service/helper_functions.dart';
@@ -18,9 +18,10 @@ class CurrencyItem extends StatelessWidget {
             Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                CircleFlag(
-                  currencyItem.currency.substring(0, 2).toLowerCase(),
-                  size: 55,
+                Flag.fromString(
+                  currencyItem.currency.substring(0, 2),
+                  height: 55,
+                  width: 55,
                 ),
                 const SizedBox(
                   width: 12,

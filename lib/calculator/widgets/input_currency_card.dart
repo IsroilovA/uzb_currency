@@ -1,4 +1,4 @@
-import 'package:circle_flags/circle_flags.dart';
+import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uzb_currency/home/cubit/currencies_cubit.dart';
@@ -31,7 +31,11 @@ class InputCurrencyCard extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CircleFlag(currency.substring(0, 2)),
+                  Flag.fromString(
+                    currency.substring(0, 2),
+                    height: 55,
+                    width: 55,
+                  ),
                   const SizedBox(width: 8),
                   Text(
                     currency,
