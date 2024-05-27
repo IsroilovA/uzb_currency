@@ -27,8 +27,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           mainAxisAlignment: MainAxisAlignment.end,
           mainAxisSize: MainAxisSize.max,
           children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 2.1,
+            Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   children: [

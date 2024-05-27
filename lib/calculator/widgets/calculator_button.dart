@@ -14,8 +14,12 @@ class CalculatorButton extends StatelessWidget {
     return TextButton(
       style: OutlinedButton.styleFrom(
           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-          minimumSize:
-              Size((screenSize.width / 3) - 8, screenSize.height / 12)),
+          minimumSize: Size(
+              (screenSize.width / 3) - 8,
+              (screenSize.height -
+                      kBottomNavigationBarHeight -
+                      Scaffold.of(context).appBarMaxHeight!) /
+                  10)),
       onPressed: () {
         onPress(value);
       },
