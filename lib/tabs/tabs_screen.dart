@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uzb_currency/calculator/calculator_screen.dart';
+import 'package:uzb_currency/home/cubit/currencies_cubit.dart';
 import 'package:uzb_currency/home/currencies_screen.dart';
 import 'package:uzb_currency/tabs/cubit/tabs_cubit.dart';
 
@@ -27,35 +28,39 @@ class _TabsScreenState extends State<TabsScreen> {
         title: Text(pageTitle),
         centerTitle: true,
       ),
-      body: BlocBuilder<TabsCubit, TabsState>(
-        buildWhen: (previous, current) {
-          if (current is TabsPageChanged) {
-            return false;
-          }
-          return true;
-        },
-        builder: (context, state) {
-          if (state is TabsInitial) {
-            return IndexedStack(
-              index: selectedTab,
-              children: const [
-                CurrenciesScreen(),
-                CalculatorScreen(),
-              ],
-            );
-          } else if (state is TabsError) {
-            return Center(
-              child: Text(
-                "Error: ${state.message}",
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground,
-                    ),
-              ),
-            );
-          } else {
-            return const Center(child: Text("Something went wrong"));
-          }
-        },
+      body: RefreshIndicator.adaptive(
+        onRefresh: () =>
+            BlocProvider.of<CurrenciesCubit>(context).fetchData(DateTime.now()),
+        child: BlocBuilder<TabsCubit, TabsState>(
+          buildWhen: (previous, current) {
+            if (current is TabsPageChanged) {
+              return false;
+            }
+            return true;
+          },
+          builder: (context, state) {
+            if (state is TabsInitial) {
+              return IndexedStack(
+                index: selectedTab,
+                children: const [
+                  CurrenciesScreen(),
+                  CalculatorScreen(),
+                ],
+              );
+            } else if (state is TabsError) {
+              return Center(
+                child: Text(
+                  "Error: ${state.message}",
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
+                ),
+              );
+            } else {
+              return const Center(child: Text("Something went wrong"));
+            }
+          },
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: BlocProvider.of<TabsCubit>(context).selectPage,

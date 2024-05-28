@@ -11,7 +11,7 @@ class CurrenciesCubit extends Cubit<CurrenciesState> {
 
   List<CurrencyRate>? currencies;
 
-  void fetchData(DateTime date) async {
+  Future<void> fetchData(DateTime date) async {
     try {
       currencies = (await ApiHelper.fetchCurrencies(date: date))['currencies'];
       final responseCode =
