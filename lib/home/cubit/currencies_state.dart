@@ -14,3 +14,9 @@ final class CurrenciesError extends CurrenciesState {
   final String message;
   CurrenciesError(this.message);
 }
+
+final class CurrenciesBadResponse extends CurrenciesState {
+  final int responseCode;
+
+  CurrenciesBadResponse(this.responseCode);
+}

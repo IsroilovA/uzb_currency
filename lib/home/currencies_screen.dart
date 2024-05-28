@@ -69,8 +69,38 @@ class _CurrenciesScreenState extends State<CurrenciesScreen> {
                     },
                   ),
                 );
+              } else if (state is CurrenciesBadResponse) {
+                return Column(
+                  children: [
+                    const Icon(Icons.wifi_tethering_error),
+                    Text(
+                      'Bad request: status code: ${state.responseCode}',
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            color: Theme.of(context).colorScheme.onBackground,
+                          ),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          BlocProvider.of<CurrenciesCubit>(context)
+                              .fetchData(DateTime.now());
+                        },
+                        child: const Text('Retry'))
+                  ],
+                );
+              } else if (state is CurrenciesError) {
+                return Text(
+                  state.message,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
+                );
               } else {
-                return const Text("Something went wrong");
+                return Text(
+                  "Something went wrong",
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
+                );
               }
             },
           ),

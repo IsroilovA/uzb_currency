@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +13,13 @@ class CurrenciesCubit extends Cubit<CurrenciesState> {
 
   void fetchData(DateTime date) async {
     try {
-      currencies = await ApiHelper.fetchCurrencies(date: date);
+      currencies = (await ApiHelper.fetchCurrencies(date: date))['currencies'];
+      final responseCode =
+          (await ApiHelper.fetchCurrencies(date: date))['statusCode'];
       if (currencies != null) {
         emit(CurrenciesDataFetched(currencies!));
+      } else {
+        emit(CurrenciesBadResponse(responseCode));
       }
     } catch (e) {
       emit(CurrenciesError(e.toString()));

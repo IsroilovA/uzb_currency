@@ -7,7 +7,7 @@ import 'package:uzb_currency/service/helper_functions.dart';
 //class to fetch curencies from remote API
 class ApiHelper {
   //fetch data fucntion
-  static Future<List<CurrencyRate>?> fetchCurrencies(
+  static Future<Map<String, dynamic>> fetchCurrencies(
       {required DateTime date, String? currency}) async {
     //fromat date to insert into the link
     final insertedDate = dateFormatter.format(date);
@@ -26,9 +26,12 @@ class ApiHelper {
       //decode the body received
       final List body = jsonDecode(response.body);
       //convert to the list of CurrencyRate and return
-      return body.map((e) => CurrencyRate.fromJson(e)).toList();
+      return {
+        'currencies': body.map((e) => CurrencyRate.fromJson(e)).toList(),
+        'statusCode': response.statusCode
+      };
     } else {
-      return null;
+      return {'currencies': null, 'statusCode': response.statusCode};
     }
   }
 }
