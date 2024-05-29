@@ -15,6 +15,22 @@ class CurrenciesCubit extends Cubit<RatesState> {
   final CurrenciesRepository _currenciesRepository;
   List<CurrencyRate?> currencies = [];
 
+  void onSearch(String query) {
+    if (currencies.isEmpty) {
+      return;
+    }
+    final searchedCurrencies = currencies
+        .where(
+          (element) =>
+              element!.currencyName
+                  .toLowerCase()
+                  .contains(query.toLowerCase()) ||
+              element.currency.toLowerCase().contains(query.toLowerCase()),
+        )
+        .toList();
+    emit(RatesDataFetched(searchedCurrencies));
+  }
+
   Future<void> fetchData(DateTime date) async {
     try {
       final connectivityResult = await (Connectivity().checkConnectivity());

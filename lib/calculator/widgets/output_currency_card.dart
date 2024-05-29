@@ -50,9 +50,7 @@ class OutputCurrencyCard extends StatelessWidget {
             const SizedBox(height: 15),
             BlocBuilder<CurrenciesCubit, RatesState>(
               buildWhen: (previous, current) {
-                if (current is RatesDataFetched ||
-                    current is RatesBadResponse ||
-                    current is RatesInitial) {
+                if (current is RatesDataFetched || current is RatesInitial) {
                   return true;
                 } else {
                   return false;
@@ -60,13 +58,15 @@ class OutputCurrencyCard extends StatelessWidget {
               },
               builder: (context, state) {
                 if (state is RatesDataFetched) {
+                  final cur = context
+                      .select((CurrenciesCubit cubit) => cubit.currencies);
                   double rateCurrencyConvertedFrom = 0;
                   double rateCurrencyConvertedTo = 0;
                   double convertedAmount = 0;
                   if (currencyConvertedFrom == 'UZS') {
                     rateCurrencyConvertedFrom = 1;
                   } else {
-                    rateCurrencyConvertedFrom = state.currencies
+                    rateCurrencyConvertedFrom = cur
                         .firstWhere((element) =>
                             element!.currency == currencyConvertedFrom)!
                         .rate;
@@ -74,7 +74,7 @@ class OutputCurrencyCard extends StatelessWidget {
                   if (currencyConvertedTo == 'UZS') {
                     rateCurrencyConvertedTo = 1;
                   } else {
-                    rateCurrencyConvertedTo = state.currencies
+                    rateCurrencyConvertedTo = cur
                         .firstWhere((element) =>
                             element!.currency == currencyConvertedTo)!
                         .rate;
@@ -90,13 +90,6 @@ class OutputCurrencyCard extends StatelessWidget {
                     softWrap: true,
                     currencyFormat(convertedAmount.toString()),
                     style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.onBackground),
-                  );
-                } else if (state is RatesBadResponse) {
-                  return Text(
-                    softWrap: true,
-                    "Problem loading currencies",
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: Theme.of(context).colorScheme.onBackground),
                   );
                 } else if (state is RatesInitial) {
