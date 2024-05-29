@@ -65,7 +65,7 @@ class _RatesScreenState extends State<RatesScreen> {
                     itemCount: state.currencies.length,
                     itemBuilder: (context, index) {
                       return CurrencyItem(
-                          currencyItem: state.currencies[index]);
+                          currencyItem: state.currencies[index]!);
                     },
                   ),
                 );

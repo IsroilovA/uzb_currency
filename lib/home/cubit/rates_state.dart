@@ -6,7 +6,7 @@ sealed class CurrenciesState {}
 final class CurrenciesInitial extends CurrenciesState {}
 
 final class CurrenciesDataFetched extends CurrenciesState {
-  final List<CurrencyRate> currencies;
+  final List<CurrencyRate?> currencies;
   CurrenciesDataFetched(this.currencies);
 }
 

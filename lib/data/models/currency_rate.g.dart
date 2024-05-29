@@ -57,3 +57,28 @@ class CurrencyRateAdapter extends TypeAdapter<CurrencyRate> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+CurrencyRate _$CurrencyRateFromJson(Map<String, dynamic> json) => CurrencyRate(
+      (json['id'] as num).toInt(),
+      (json['code'] as num).toInt(),
+      json['currency'] as String,
+      json['currencyName'] as String,
+      json['date'] as String,
+      (json['rate'] as num).toDouble(),
+      (json['difference'] as num).toDouble(),
+    );
+
+Map<String, dynamic> _$CurrencyRateToJson(CurrencyRate instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'code': instance.code,
+      'currency': instance.currency,
+      'currencyName': instance.currencyName,
+      'date': instance.date,
+      'rate': instance.rate,
+      'difference': instance.difference,
+    };

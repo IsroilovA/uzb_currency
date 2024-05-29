@@ -68,7 +68,7 @@ class OutputCurrencyCard extends StatelessWidget {
                   } else {
                     rateCurrencyConvertedFrom = state.currencies
                         .firstWhere((element) =>
-                            element.currency == currencyConvertedFrom)
+                            element!.currency == currencyConvertedFrom)!
                         .rate;
                   }
                   if (currencyConvertedTo == 'UZS') {
@@ -76,7 +76,7 @@ class OutputCurrencyCard extends StatelessWidget {
                   } else {
                     rateCurrencyConvertedTo = state.currencies
                         .firstWhere((element) =>
-                            element.currency == currencyConvertedTo)
+                            element!.currency == currencyConvertedTo)!
                         .rate;
                   }
                   if (inputAmount.isNotEmpty) {
