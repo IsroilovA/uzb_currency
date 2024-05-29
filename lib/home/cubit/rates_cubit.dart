@@ -7,10 +7,10 @@ import 'package:uzb_currency/service/currencies_repository.dart';
 
 part 'rates_state.dart';
 
-class CurrenciesCubit extends Cubit<CurrenciesState> {
+class CurrenciesCubit extends Cubit<RatesState> {
   CurrenciesCubit({required CurrenciesRepository currenciesRepository})
       : _currenciesRepository = currenciesRepository,
-        super(CurrenciesInitial());
+        super(RatesInitial());
 
   final CurrenciesRepository _currenciesRepository;
   List<CurrencyRate?> currencies = [];
@@ -24,21 +24,14 @@ class CurrenciesCubit extends Cubit<CurrenciesState> {
             await _currenciesRepository.getCurrencies(date: DateTime.now());
         await _currenciesRepository.saveCurrenciesLocally(serverResponse);
         currencies = await _currenciesRepository.fetchAllLocalCurrencies();
-        emit(CurrenciesDataFetched(currencies));
+        currencies.sort(((a, b) => a!.id.compareTo(b!.id)));
+        emit(RatesDataFetched(currencies));
       } else {
         currencies = await _currenciesRepository.fetchAllLocalCurrencies();
-        emit(CurrenciesDataFetched(currencies));
+        emit(RatesDataFetched(currencies));
       }
-      // currencies = (await ApiHelper.fetchCurrencies(date: date))['currencies'];
-      // final responseCode =
-      //     (await ApiHelper.fetchCurrencies(date: date))['statusCode'];
-      // if (currencies != null && currencies!.isNotEmpty) {
-      //   emit(CurrenciesDataFetched(currencies!));
-      // } else {
-      //   emit(CurrenciesBadResponse(responseCode));
-      // }
     } catch (e) {
-      emit(CurrenciesError(e.toString()));
+      emit(RatesError(e.toString()));
     }
   }
 
@@ -48,13 +41,10 @@ class CurrenciesCubit extends Cubit<CurrenciesState> {
   ) {
     showCurrencyPicker(
       favorite: ['UZS', 'USD', 'EUR', 'RUB'],
-      currencyFilter: currencies == null
-          ? null
-          : List.generate(
-              currencies!.length + 1,
-              (index) => index == currencies.length
-                  ? 'UZS'
-                  : currencies[index]!.currency),
+      currencyFilter: List.generate(
+          currencies.length + 1,
+          (index) =>
+              index == currencies.length ? 'UZS' : currencies[index]!.currency),
       theme: CurrencyPickerThemeData(
         bottomSheetHeight: MediaQuery.of(context).size.height / 1.5,
         currencySignTextStyle: const TextStyle().copyWith(

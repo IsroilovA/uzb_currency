@@ -1,12 +1,10 @@
 import 'dart:convert';
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 part 'currency_rate.g.dart';
 
 @HiveType(typeId: 0)
-@JsonSerializable()
 class CurrencyRate {
   @HiveField(0)
   int id;
@@ -37,13 +35,13 @@ class CurrencyRate {
 
   factory CurrencyRate.fromMap(Map<String, dynamic> map) {
     return CurrencyRate(
-      map['id'] as int,
-      map['code'] as int,
-      map['currency'] as String,
-      map['currencyName'] as String,
-      map['date'] as String,
-      map['rate'] as double,
-      map['difference'] as double,
+      (map['id'] as num).toInt(),
+      int.parse(map['Code'] as String),
+      map['Ccy'] as String,
+      map['CcyNm_EN'] as String,
+      map['Date'] as String,
+      double.parse(map['Rate'] as String),
+      double.parse(map['Diff'] as String),
     );
   }
 

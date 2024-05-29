@@ -1,22 +1,22 @@
 part of 'rates_cubit.dart';
 
 @immutable
-sealed class CurrenciesState {}
+sealed class RatesState {}
 
-final class CurrenciesInitial extends CurrenciesState {}
+final class RatesInitial extends RatesState {}
 
-final class CurrenciesDataFetched extends CurrenciesState {
+final class RatesDataFetched extends RatesState {
   final List<CurrencyRate?> currencies;
-  CurrenciesDataFetched(this.currencies);
+  RatesDataFetched(this.currencies);
 }
 
-final class CurrenciesError extends CurrenciesState {
+final class RatesError extends RatesState {
   final String message;
-  CurrenciesError(this.message);
+  RatesError(this.message);
 }
 
-final class CurrenciesBadResponse extends CurrenciesState {
+final class RatesBadResponse extends RatesState {
   final int responseCode;
 
-  CurrenciesBadResponse(this.responseCode);
+  RatesBadResponse(this.responseCode);
 }

@@ -39,7 +39,6 @@ class CurrenciesRepository {
         Map<String, dynamic>.from(e as Map<String, dynamic>),
       ),
     );
-
     return posts.toList();
   }
 

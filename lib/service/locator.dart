@@ -10,7 +10,7 @@ Future<void> initialiseLocator() async {
   const currenciesKey = 'currencies';
   //box
   final currenciesBox = await Hive.openBox<CurrencyRate?>(currenciesKey);
-
+  //locator
   locator.registerSingleton(
     CurrenciesRepository(currenciesBox: currenciesBox),
   );
