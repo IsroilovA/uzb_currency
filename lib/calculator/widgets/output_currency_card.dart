@@ -48,18 +48,18 @@ class OutputCurrencyCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 15),
-            BlocBuilder<CurrenciesCubit, CurrenciesState>(
+            BlocBuilder<CurrenciesCubit, RatesState>(
               buildWhen: (previous, current) {
-                if (current is CurrenciesDataFetched ||
-                    current is CurrenciesBadResponse ||
-                    current is CurrenciesInitial) {
+                if (current is RatesDataFetched ||
+                    current is RatesBadResponse ||
+                    current is RatesInitial) {
                   return true;
                 } else {
                   return false;
                 }
               },
               builder: (context, state) {
-                if (state is CurrenciesDataFetched) {
+                if (state is RatesDataFetched) {
                   double rateCurrencyConvertedFrom = 0;
                   double rateCurrencyConvertedTo = 0;
                   double convertedAmount = 0;
@@ -68,7 +68,7 @@ class OutputCurrencyCard extends StatelessWidget {
                   } else {
                     rateCurrencyConvertedFrom = state.currencies
                         .firstWhere((element) =>
-                            element.currency == currencyConvertedFrom)
+                            element!.currency == currencyConvertedFrom)!
                         .rate;
                   }
                   if (currencyConvertedTo == 'UZS') {
@@ -76,7 +76,7 @@ class OutputCurrencyCard extends StatelessWidget {
                   } else {
                     rateCurrencyConvertedTo = state.currencies
                         .firstWhere((element) =>
-                            element.currency == currencyConvertedTo)
+                            element!.currency == currencyConvertedTo)!
                         .rate;
                   }
                   if (inputAmount.isNotEmpty) {
@@ -92,14 +92,14 @@ class OutputCurrencyCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                         color: Theme.of(context).colorScheme.onBackground),
                   );
-                } else if (state is CurrenciesBadResponse) {
+                } else if (state is RatesBadResponse) {
                   return Text(
                     softWrap: true,
                     "Problem loading currencies",
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: Theme.of(context).colorScheme.onBackground),
                   );
-                } else if (state is CurrenciesInitial) {
+                } else if (state is RatesInitial) {
                   return const Center(
                       child: CircularProgressIndicator.adaptive());
                 } else {

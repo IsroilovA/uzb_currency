@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uzb_currency/home/cubit/rates_cubit.dart';
+import 'package:uzb_currency/service/currencies_repository.dart';
+import 'package:uzb_currency/service/hive_initialiser.dart';
+import 'package:uzb_currency/service/locator.dart';
 import 'package:uzb_currency/tabs/cubit/tabs_cubit.dart';
 import 'package:uzb_currency/tabs/tabs_screen.dart';
 
@@ -29,7 +33,11 @@ final darkTheme = ThemeData(
       GoogleFonts.poppinsTextTheme(), // Using Poppins font for the dark theme
 );
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await initialiseHive();
+  await initialiseLocator();
   runApp(const App());
 }
 
@@ -48,7 +56,8 @@ class App extends StatelessWidget {
               create: (context) => TabsCubit(),
             ),
             BlocProvider(
-              create: (context) => CurrenciesCubit(),
+              create: (context) => CurrenciesCubit(
+                  currenciesRepository: locator<CurrenciesRepository>()),
             ),
           ],
           child: const TabsScreen(),

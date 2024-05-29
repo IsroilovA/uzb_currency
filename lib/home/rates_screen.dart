@@ -50,26 +50,26 @@ class _RatesScreenState extends State<RatesScreen> {
             ),
           ),
           const SizedBox(height: 10),
-          BlocBuilder<CurrenciesCubit, CurrenciesState>(
+          BlocBuilder<CurrenciesCubit, RatesState>(
             builder: (context, state) {
-              if (state is CurrenciesInitial) {
+              if (state is RatesInitial) {
                 BlocProvider.of<CurrenciesCubit>(context)
                     .fetchData(DateTime.now());
                 return const Center(
                   child: CircularProgressIndicator.adaptive(),
                 );
-              } else if (state is CurrenciesDataFetched) {
+              } else if (state is RatesDataFetched) {
                 return Expanded(
                   child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: state.currencies.length,
                     itemBuilder: (context, index) {
                       return CurrencyItem(
-                          currencyItem: state.currencies[index]);
+                          currencyItem: state.currencies[index]!);
                     },
                   ),
                 );
-              } else if (state is CurrenciesBadResponse) {
+              } else if (state is RatesBadResponse) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
@@ -104,7 +104,7 @@ class _RatesScreenState extends State<RatesScreen> {
                         ))
                   ],
                 );
-              } else if (state is CurrenciesError) {
+              } else if (state is RatesError) {
                 return Expanded(
                   child: ListView(
                     children: [

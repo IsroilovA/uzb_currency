@@ -1,28 +1,37 @@
 import 'package:bloc/bloc.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:uzb_currency/data/models/currency_rate.dart';
-import 'package:uzb_currency/service/api_helper.dart';
+import 'package:uzb_currency/service/currencies_repository.dart';
 
 part 'rates_state.dart';
 
-class CurrenciesCubit extends Cubit<CurrenciesState> {
-  CurrenciesCubit() : super(CurrenciesInitial());
+class CurrenciesCubit extends Cubit<RatesState> {
+  CurrenciesCubit({required CurrenciesRepository currenciesRepository})
+      : _currenciesRepository = currenciesRepository,
+        super(RatesInitial());
 
-  List<CurrencyRate>? currencies;
+  final CurrenciesRepository _currenciesRepository;
+  List<CurrencyRate?> currencies = [];
 
   Future<void> fetchData(DateTime date) async {
     try {
-      currencies = (await ApiHelper.fetchCurrencies(date: date))['currencies'];
-      final responseCode =
-          (await ApiHelper.fetchCurrencies(date: date))['statusCode'];
-      if (currencies != null && currencies!.isNotEmpty) {
-        emit(CurrenciesDataFetched(currencies!));
+      final connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult.contains(ConnectivityResult.mobile) ||
+          connectivityResult.contains(ConnectivityResult.wifi)) {
+        final serverResponse =
+            await _currenciesRepository.getCurrencies(date: DateTime.now());
+        await _currenciesRepository.saveCurrenciesLocally(serverResponse);
+        currencies = await _currenciesRepository.fetchAllLocalCurrencies();
+        currencies.sort(((a, b) => a!.id.compareTo(b!.id)));
+        emit(RatesDataFetched(currencies));
       } else {
-        emit(CurrenciesBadResponse(responseCode));
+        currencies = await _currenciesRepository.fetchAllLocalCurrencies();
+        emit(RatesDataFetched(currencies));
       }
     } catch (e) {
-      emit(CurrenciesError(e.toString()));
+      emit(RatesError(e.toString()));
     }
   }
 
@@ -32,13 +41,10 @@ class CurrenciesCubit extends Cubit<CurrenciesState> {
   ) {
     showCurrencyPicker(
       favorite: ['UZS', 'USD', 'EUR', 'RUB'],
-      currencyFilter: currencies == null
-          ? null
-          : List.generate(
-              currencies!.length + 1,
-              (index) => index == currencies!.length
-                  ? 'UZS'
-                  : currencies![index].currency),
+      currencyFilter: List.generate(
+          currencies.length + 1,
+          (index) =>
+              index == currencies.length ? 'UZS' : currencies[index]!.currency),
       theme: CurrencyPickerThemeData(
         bottomSheetHeight: MediaQuery.of(context).size.height / 1.5,
         currencySignTextStyle: const TextStyle().copyWith(
