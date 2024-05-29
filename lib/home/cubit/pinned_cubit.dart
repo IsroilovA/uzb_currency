@@ -15,7 +15,7 @@ class PinnedCubit extends Cubit<PinnedState> {
   void pinUnpinCurrency(CurrencyRate currencyRate) async {
     try {
       await _currenciesRepository.pinUnpinCurrency(currencyRate);
-      await fetchPinnedCurrencies();
+      emit(PinnedInitial());
     } catch (e) {
       emit(PinnedError(e.toString()));
     }

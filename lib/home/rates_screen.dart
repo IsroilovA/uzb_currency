@@ -20,23 +20,6 @@ class _RatesScreenState extends State<RatesScreen> {
       padding: const EdgeInsets.all(12),
       child: Column(
         children: [
-          TextField(
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground,
-                ),
-            onChanged: (value) {
-              BlocProvider.of<RatesCubit>(context).onSearch(value);
-            },
-            decoration: InputDecoration(
-              labelText: 'Search',
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(50)),
-              prefixIcon: const Icon(Icons.search),
-            ),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
           Container(
             decoration: BoxDecoration(
                 border: Border(
@@ -67,6 +50,9 @@ class _RatesScreenState extends State<RatesScreen> {
               ],
             ),
           ),
+          const SizedBox(
+            height: 20,
+          ),
           BlocBuilder<PinnedCubit, PinnedState>(
             builder: (context, state) {
               if (state is PinnedInitial) {
@@ -75,39 +61,44 @@ class _RatesScreenState extends State<RatesScreen> {
                   child: CircularProgressIndicator.adaptive(),
                 );
               } else if (state is PinnedRatesFetched) {
-                return Expanded(
-                  child: ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: state.pinnedCurrencies.length,
-                    itemBuilder: (context, index) {
-                      return CurrencyItem(
-                          currencyItem: state.pinnedCurrencies[index]!);
-                    },
-                  ),
+                return ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: state.pinnedCurrencies.length,
+                  itemBuilder: (context, index) {
+                    return CurrencyItem(
+                        currencyItem: state.pinnedCurrencies[index]!);
+                  },
                 );
               } else if (state is PinnedError) {
-                return Expanded(
-                  child: ListView(
-                    children: [
-                      Text(
-                        state.message,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(
-                              color: Theme.of(context).colorScheme.onBackground,
-                            ),
+                return Text(
+                  state.message,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground,
                       ),
-                    ],
-                  ),
                 );
               } else {
                 return const SizedBox();
               }
             },
           ),
-          const SizedBox(height: 10),
+          TextField(
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
+            onChanged: (value) {
+              BlocProvider.of<RatesCubit>(context).onSearch(value);
+            },
+            decoration: InputDecoration(
+              labelText: 'Search',
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(50)),
+              prefixIcon: const Icon(Icons.search),
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
           BlocBuilder<RatesCubit, RatesState>(
             builder: (context, state) {
               if (state is RatesInitial) {
