@@ -30,7 +30,7 @@ class _TabsScreenState extends State<TabsScreen> {
       ),
       body: RefreshIndicator.adaptive(
         onRefresh: () =>
-            BlocProvider.of<CurrenciesCubit>(context).fetchData(DateTime.now()),
+            BlocProvider.of<RatesCubit>(context).fetchData(DateTime.now()),
         child: BlocBuilder<TabsCubit, TabsState>(
           buildWhen: (previous, current) {
             if (current is TabsPageChanged) {

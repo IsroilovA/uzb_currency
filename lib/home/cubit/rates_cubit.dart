@@ -7,13 +7,14 @@ import 'package:uzb_currency/service/currencies_repository.dart';
 
 part 'rates_state.dart';
 
-class CurrenciesCubit extends Cubit<RatesState> {
-  CurrenciesCubit({required CurrenciesRepository currenciesRepository})
+class RatesCubit extends Cubit<RatesState> {
+  RatesCubit({required CurrenciesRepository currenciesRepository})
       : _currenciesRepository = currenciesRepository,
         super(RatesInitial());
 
   final CurrenciesRepository _currenciesRepository;
   List<CurrencyRate?> currencies = [];
+  List<CurrencyRate?> pinnedCurrencies = [];
 
   void onSearch(String query) {
     if (currencies.isEmpty) {
@@ -34,20 +35,20 @@ class CurrenciesCubit extends Cubit<RatesState> {
   void pinUnpinCurrency(CurrencyRate currencyRate) async {
     try {
       await _currenciesRepository.pinUnpinCurrency(currencyRate);
-      currencies.sort(
-        (a, b) {
-          if (_currenciesRepository.isCurrencyPinned(a!) &&
-              _currenciesRepository.isCurrencyPinned(b!)) {
-            return 0;
-          } else if (_currenciesRepository.isCurrencyPinned(a) &&
-              !_currenciesRepository.isCurrencyPinned(b!)) {
-            return -1;
-          } else {
-            return 1;
-          }
-        },
-      );
-      emit(RatesDataFetched(currencies));
+      await fetchPinnedCurrencies();
+    } catch (e) {
+      emit(RatesError(e.toString()));
+    }
+  }
+
+  Future<void> fetchPinnedCurrencies() async {
+    try {
+      pinnedCurrencies = await _currenciesRepository.fetchPinnedCurrencies();
+      if (pinnedCurrencies.isNotEmpty) {
+        emit(RatesPinnedFetched(pinnedCurrencies));
+      } else {
+        emit(NoRatesPinned());
+      }
     } catch (e) {
       emit(RatesError(e.toString()));
     }
@@ -62,22 +63,26 @@ class CurrenciesCubit extends Cubit<RatesState> {
             await _currenciesRepository.getCurrencies(date: DateTime.now());
         await _currenciesRepository.saveCurrenciesLocally(serverResponse);
         currencies = await _currenciesRepository.fetchAllLocalCurrencies();
-        currencies.sort(
-          (a, b) {
-            if (_currenciesRepository.isCurrencyPinned(a!) &&
-                _currenciesRepository.isCurrencyPinned(b!)) {
-              return 0;
-            } else if (_currenciesRepository.isCurrencyPinned(a) &&
-                !_currenciesRepository.isCurrencyPinned(b!)) {
-              return -1;
-            } else {
-              return 1;
-            }
-          },
-        );
+        // currencies.sort(
+        //   (a, b) {
+        //     if (_currenciesRepository.isCurrencyPinned(a!) &&
+        //         _currenciesRepository.isCurrencyPinned(b!)) {
+        //       return 0;
+        //     } else if (_currenciesRepository.isCurrencyPinned(a) &&
+        //         !_currenciesRepository.isCurrencyPinned(b!)) {
+        //       return -1;
+        //     } else {
+        //       return 1;
+        //     }
+        //   },
+        // );
         emit(RatesDataFetched(currencies));
       } else {
         currencies = await _currenciesRepository.fetchAllLocalCurrencies();
+        pinnedCurrencies = currencies
+            .where(
+                (element) => _currenciesRepository.isCurrencyPinned(element!))
+            .toList();
         emit(RatesDataFetched(currencies));
       }
     } catch (e) {

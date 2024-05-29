@@ -57,6 +57,14 @@ class CurrenciesRepository {
     return localCurrencies;
   }
 
+  Future<List<CurrencyRate?>> fetchPinnedCurrencies() async {
+    final List<CurrencyRate?> pinnedCurrencies = [];
+    for (var element in _currenciesPinnedBox.values) {
+      pinnedCurrencies.add(_currenciesBox.get(element!.id));
+    }
+    return pinnedCurrencies;
+  }
+
   Future<void> pinUnpinCurrency(CurrencyRate currencyRate) async {
     if (_currenciesPinnedBox.keys.contains(currencyRate.code)) {
       await _currenciesPinnedBox.delete(currencyRate.code);

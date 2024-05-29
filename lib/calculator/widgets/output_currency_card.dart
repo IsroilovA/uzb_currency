@@ -25,8 +25,7 @@ class OutputCurrencyCard extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                BlocProvider.of<CurrenciesCubit>(context).showPicker(
-                    (currency) {
+                BlocProvider.of<RatesCubit>(context).showPicker((currency) {
                   onCurrencyChanged(currency.code);
                 }, context);
               },
@@ -48,7 +47,7 @@ class OutputCurrencyCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 15),
-            BlocBuilder<CurrenciesCubit, RatesState>(
+            BlocBuilder<RatesCubit, RatesState>(
               buildWhen: (previous, current) {
                 if (current is RatesDataFetched || current is RatesInitial) {
                   return true;
@@ -58,8 +57,8 @@ class OutputCurrencyCard extends StatelessWidget {
               },
               builder: (context, state) {
                 if (state is RatesDataFetched) {
-                  final currencies = context
-                      .select((CurrenciesCubit cubit) => cubit.currencies);
+                  final currencies =
+                      context.select((RatesCubit cubit) => cubit.currencies);
                   double rateCurrencyConvertedFrom = 0;
                   double rateCurrencyConvertedTo = 0;
                   double convertedAmount = 0;

@@ -56,7 +56,7 @@ class App extends StatelessWidget {
               create: (context) => TabsCubit(),
             ),
             BlocProvider(
-              create: (context) => CurrenciesCubit(
+              create: (context) => RatesCubit(
                   currenciesRepository: locator<CurrenciesRepository>()),
             ),
           ],

@@ -10,26 +10,29 @@ class CurrencyItem extends StatelessWidget {
   final CurrencyRate currencyItem;
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        child: Dismissible(
-          key: ValueKey(currencyItem.id),
-          direction: DismissDirection.startToEnd,
-          confirmDismiss: (direction) async {
-            BlocProvider.of<CurrenciesCubit>(context)
-                .pinUnpinCurrency(currencyItem);
-            return false;
-          },
-          background: Material(
-            color: Colors.blue,
-            child: Icon(
-              Icons.push_pin,
-              color: Theme.of(context).colorScheme.background,
-            ),
+    return Dismissible(
+      key: ValueKey(currencyItem.id),
+      direction: DismissDirection.startToEnd,
+      confirmDismiss: (direction) async {
+        BlocProvider.of<RatesCubit>(context).pinUnpinCurrency(currencyItem);
+        return false;
+      },
+      background: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 30),
+        color: Colors.blue,
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Icon(
+            Icons.push_pin,
+            color: Theme.of(context).colorScheme.background,
           ),
+        ),
+      ),
+      child: Card(
+        child: Container(
+          padding: const EdgeInsets.all(12),
           child: Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Wrap(
