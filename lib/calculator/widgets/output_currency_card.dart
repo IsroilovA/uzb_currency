@@ -50,7 +50,9 @@ class OutputCurrencyCard extends StatelessWidget {
             const SizedBox(height: 15),
             BlocBuilder<CurrenciesCubit, CurrenciesState>(
               buildWhen: (previous, current) {
-                if (current is CurrenciesDataFetched) {
+                if (current is CurrenciesDataFetched ||
+                    current is CurrenciesBadResponse ||
+                    current is CurrenciesInitial) {
                   return true;
                 } else {
                   return false;
@@ -90,9 +92,22 @@ class OutputCurrencyCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                         color: Theme.of(context).colorScheme.onBackground),
                   );
-                } else {
+                } else if (state is CurrenciesBadResponse) {
+                  return Text(
+                    softWrap: true,
+                    "Problem loading currencies",
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground),
+                  );
+                } else if (state is CurrenciesInitial) {
                   return const Center(
                       child: CircularProgressIndicator.adaptive());
+                } else {
+                  return Center(
+                    child: Text("Something went wrong",
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            color: Theme.of(context).colorScheme.onBackground)),
+                  );
                 }
               },
             ),

@@ -71,11 +71,20 @@ class _RatesScreenState extends State<RatesScreen> {
                 );
               } else if (state is CurrenciesBadResponse) {
                 return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.wifi_tethering_error),
+                    const Icon(
+                      Icons.error,
+                      size: 80,
+                    ),
                     Text(
                       'Bad request: status code: ${state.responseCode}',
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall!
+                          .copyWith(
                             color: Theme.of(context).colorScheme.onBackground,
                           ),
                     ),
@@ -84,7 +93,15 @@ class _RatesScreenState extends State<RatesScreen> {
                           BlocProvider.of<CurrenciesCubit>(context)
                               .fetchData(DateTime.now());
                         },
-                        child: const Text('Retry'))
+                        child: Text(
+                          'Retry',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                        ))
                   ],
                 );
               } else if (state is CurrenciesError) {

@@ -16,7 +16,7 @@ class CurrenciesCubit extends Cubit<CurrenciesState> {
       currencies = (await ApiHelper.fetchCurrencies(date: date))['currencies'];
       final responseCode =
           (await ApiHelper.fetchCurrencies(date: date))['statusCode'];
-      if (currencies != null) {
+      if (currencies != null && currencies!.isNotEmpty) {
         emit(CurrenciesDataFetched(currencies!));
       } else {
         emit(CurrenciesBadResponse(responseCode));
