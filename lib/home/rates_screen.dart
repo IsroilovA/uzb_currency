@@ -3,16 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uzb_currency/home/cubit/currencies_cubit.dart';
 import 'package:uzb_currency/home/widgets/currency_item.dart';
 
-class CurrenciesScreen extends StatefulWidget {
-  const CurrenciesScreen({super.key});
+class RatesScreen extends StatefulWidget {
+  const RatesScreen({super.key});
 
   @override
-  State<CurrenciesScreen> createState() {
-    return _CurrenciesScreenState();
+  State<RatesScreen> createState() {
+    return _RatesScreenState();
   }
 }
 
-class _CurrenciesScreenState extends State<CurrenciesScreen> {
+class _RatesScreenState extends State<RatesScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
