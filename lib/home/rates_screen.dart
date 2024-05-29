@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uzb_currency/home/cubit/currencies_cubit.dart';
-import 'package:uzb_currency/home/widgets/currency_item.dart';
+import 'package:uzb_currency/home/cubit/rates_cubit.dart';
+import 'package:uzb_currency/home/widgets/rate_item.dart';
 
 class RatesScreen extends StatefulWidget {
   const RatesScreen({super.key});

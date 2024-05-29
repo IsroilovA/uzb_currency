@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:uzb_currency/data/models/currency_rate.dart';
 import 'package:uzb_currency/service/api_helper.dart';
 
-part 'currencies_state.dart';
+part 'rates_state.dart';
 
 class CurrenciesCubit extends Cubit<CurrenciesState> {
   CurrenciesCubit() : super(CurrenciesInitial());

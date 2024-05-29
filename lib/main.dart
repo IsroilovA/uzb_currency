@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:uzb_currency/home/cubit/currencies_cubit.dart';
+import 'package:uzb_currency/home/cubit/rates_cubit.dart';
 import 'package:uzb_currency/tabs/cubit/tabs_cubit.dart';
 import 'package:uzb_currency/tabs/tabs_screen.dart';
 

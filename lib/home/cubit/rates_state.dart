@@ -1,4 +1,4 @@
-part of 'currencies_cubit.dart';
+part of 'rates_cubit.dart';
 
 @immutable
 sealed class CurrenciesState {}

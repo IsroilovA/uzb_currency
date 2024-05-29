@@ -1,7 +1,7 @@
 import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uzb_currency/home/cubit/currencies_cubit.dart';
+import 'package:uzb_currency/home/cubit/rates_cubit.dart';
 import 'package:uzb_currency/service/helper_functions.dart';
 
 class InputCurrencyCard extends StatelessWidget {
