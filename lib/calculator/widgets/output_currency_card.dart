@@ -58,7 +58,7 @@ class OutputCurrencyCard extends StatelessWidget {
               },
               builder: (context, state) {
                 if (state is RatesDataFetched) {
-                  final cur = context
+                  final currencies = context
                       .select((CurrenciesCubit cubit) => cubit.currencies);
                   double rateCurrencyConvertedFrom = 0;
                   double rateCurrencyConvertedTo = 0;
@@ -66,7 +66,7 @@ class OutputCurrencyCard extends StatelessWidget {
                   if (currencyConvertedFrom == 'UZS') {
                     rateCurrencyConvertedFrom = 1;
                   } else {
-                    rateCurrencyConvertedFrom = cur
+                    rateCurrencyConvertedFrom = currencies
                         .firstWhere((element) =>
                             element!.currency == currencyConvertedFrom)!
                         .rate;
@@ -74,7 +74,7 @@ class OutputCurrencyCard extends StatelessWidget {
                   if (currencyConvertedTo == 'UZS') {
                     rateCurrencyConvertedTo = 1;
                   } else {
-                    rateCurrencyConvertedTo = cur
+                    rateCurrencyConvertedTo = currencies
                         .firstWhere((element) =>
                             element!.currency == currencyConvertedTo)!
                         .rate;

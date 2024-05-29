@@ -40,7 +40,6 @@ class CurrenciesCubit extends Cubit<RatesState> {
             await _currenciesRepository.getCurrencies(date: DateTime.now());
         await _currenciesRepository.saveCurrenciesLocally(serverResponse);
         currencies = await _currenciesRepository.fetchAllLocalCurrencies();
-        currencies.sort(((a, b) => a!.id.compareTo(b!.id)));
         emit(RatesDataFetched(currencies));
       } else {
         currencies = await _currenciesRepository.fetchAllLocalCurrencies();
