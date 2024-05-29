@@ -22,10 +22,3 @@ final class RatesBadResponse extends RatesState {
 
   RatesBadResponse(this.responseCode);
 }
-
-final class RatesPinnedFetched extends RatesState {
-  final List<CurrencyRate?> currencies;
-  RatesPinnedFetched(this.currencies);
-}
-
-final class NoRatesPinned extends RatesState{}

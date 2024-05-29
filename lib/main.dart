@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:uzb_currency/home/cubit/pinned_cubit.dart';
 import 'package:uzb_currency/home/cubit/rates_cubit.dart';
 import 'package:uzb_currency/service/currencies_repository.dart';
 import 'package:uzb_currency/service/hive_initialiser.dart';
@@ -57,6 +58,10 @@ class App extends StatelessWidget {
             ),
             BlocProvider(
               create: (context) => RatesCubit(
+                  currenciesRepository: locator<CurrenciesRepository>()),
+            ),
+            BlocProvider(
+              create: (context) => PinnedCubit(
                   currenciesRepository: locator<CurrenciesRepository>()),
             ),
           ],

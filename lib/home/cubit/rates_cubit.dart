@@ -14,7 +14,6 @@ class RatesCubit extends Cubit<RatesState> {
 
   final CurrenciesRepository _currenciesRepository;
   List<CurrencyRate?> currencies = [];
-  List<CurrencyRate?> pinnedCurrencies = [];
 
   void onSearch(String query) {
     if (currencies.isEmpty) {
@@ -30,28 +29,6 @@ class RatesCubit extends Cubit<RatesState> {
         )
         .toList();
     emit(RatesDataFetched(searchedCurrencies));
-  }
-
-  void pinUnpinCurrency(CurrencyRate currencyRate) async {
-    try {
-      await _currenciesRepository.pinUnpinCurrency(currencyRate);
-      await fetchPinnedCurrencies();
-    } catch (e) {
-      emit(RatesError(e.toString()));
-    }
-  }
-
-  Future<void> fetchPinnedCurrencies() async {
-    try {
-      pinnedCurrencies = await _currenciesRepository.fetchPinnedCurrencies();
-      if (pinnedCurrencies.isNotEmpty) {
-        emit(RatesPinnedFetched(pinnedCurrencies));
-      } else {
-        emit(NoRatesPinned());
-      }
-    } catch (e) {
-      emit(RatesError(e.toString()));
-    }
   }
 
   Future<void> fetchData(DateTime date) async {
@@ -79,10 +56,6 @@ class RatesCubit extends Cubit<RatesState> {
         emit(RatesDataFetched(currencies));
       } else {
         currencies = await _currenciesRepository.fetchAllLocalCurrencies();
-        pinnedCurrencies = currencies
-            .where(
-                (element) => _currenciesRepository.isCurrencyPinned(element!))
-            .toList();
         emit(RatesDataFetched(currencies));
       }
     } catch (e) {

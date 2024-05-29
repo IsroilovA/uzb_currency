@@ -2,7 +2,7 @@ import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uzb_currency/data/models/currency_rate.dart';
-import 'package:uzb_currency/home/cubit/rates_cubit.dart';
+import 'package:uzb_currency/home/cubit/pinned_cubit.dart';
 import 'package:uzb_currency/service/helper_functions.dart';
 
 class CurrencyItem extends StatelessWidget {
@@ -14,7 +14,7 @@ class CurrencyItem extends StatelessWidget {
       key: ValueKey(currencyItem.id),
       direction: DismissDirection.startToEnd,
       confirmDismiss: (direction) async {
-        BlocProvider.of<RatesCubit>(context).pinUnpinCurrency(currencyItem);
+        BlocProvider.of<PinnedCubit>(context).pinUnpinCurrency(currencyItem);
         return false;
       },
       background: Container(
