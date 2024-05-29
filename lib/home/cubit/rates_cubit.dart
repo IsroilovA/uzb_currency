@@ -31,6 +31,28 @@ class CurrenciesCubit extends Cubit<RatesState> {
     emit(RatesDataFetched(searchedCurrencies));
   }
 
+  void pinUnpinCurrency(CurrencyRate currencyRate) async {
+    try {
+      await _currenciesRepository.pinUnpinCurrency(currencyRate);
+      currencies.sort(
+        (a, b) {
+          if (_currenciesRepository.isCurrencyPinned(a!) &&
+              _currenciesRepository.isCurrencyPinned(b!)) {
+            return 0;
+          } else if (_currenciesRepository.isCurrencyPinned(a) &&
+              !_currenciesRepository.isCurrencyPinned(b!)) {
+            return -1;
+          } else {
+            return 1;
+          }
+        },
+      );
+      emit(RatesDataFetched(currencies));
+    } catch (e) {
+      emit(RatesError(e.toString()));
+    }
+  }
+
   Future<void> fetchData(DateTime date) async {
     try {
       final connectivityResult = await (Connectivity().checkConnectivity());
@@ -40,6 +62,19 @@ class CurrenciesCubit extends Cubit<RatesState> {
             await _currenciesRepository.getCurrencies(date: DateTime.now());
         await _currenciesRepository.saveCurrenciesLocally(serverResponse);
         currencies = await _currenciesRepository.fetchAllLocalCurrencies();
+        currencies.sort(
+          (a, b) {
+            if (_currenciesRepository.isCurrencyPinned(a!) &&
+                _currenciesRepository.isCurrencyPinned(b!)) {
+              return 0;
+            } else if (_currenciesRepository.isCurrencyPinned(a) &&
+                !_currenciesRepository.isCurrencyPinned(b!)) {
+              return -1;
+            } else {
+              return 1;
+            }
+          },
+        );
         emit(RatesDataFetched(currencies));
       } else {
         currencies = await _currenciesRepository.fetchAllLocalCurrencies();
