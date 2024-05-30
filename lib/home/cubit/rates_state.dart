@@ -5,6 +5,8 @@ sealed class RatesState {}
 
 final class RatesInitial extends RatesState {}
 
+final class PinnedRatesInitial extends RatesState {}
+
 final class RatesDataFetched extends RatesState {
   final List<CurrencyRate?> currencies;
   RatesDataFetched(this.currencies);

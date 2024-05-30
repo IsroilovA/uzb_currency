@@ -1,10 +1,12 @@
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 0)
+part 'currency_pinned.g.dart';
+
+@HiveType(typeId: 1)
 class CurrencyPinned {
   @HiveField(0)
-  int code;
+  int id;
   @HiveField(1)
-  bool isPinned;
-  CurrencyPinned(this.code, this.isPinned);
+  int code;
+  CurrencyPinned(this.id, this.code);
 }

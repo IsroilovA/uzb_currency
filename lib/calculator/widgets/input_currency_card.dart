@@ -23,8 +23,7 @@ class InputCurrencyCard extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                BlocProvider.of<CurrenciesCubit>(context).showPicker(
-                    (currency) {
+                BlocProvider.of<RatesCubit>(context).showPicker((currency) {
                   onCurrencyChanged(currency.code);
                 }, context);
               },
