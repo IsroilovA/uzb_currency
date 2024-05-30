@@ -84,15 +84,24 @@ class _RatesScreenState extends State<RatesScreen> {
                                   ),
                             ),
                             const SizedBox(height: 5),
-                            ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: state.pinnedCurrencies.length,
-                              itemBuilder: (context, index) {
-                                return CurrencyItem(
-                                    currencyItem:
-                                        state.pinnedCurrencies[index]!);
-                              },
+                            Card(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
+                              elevation: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: state.pinnedCurrencies.length,
+                                  itemBuilder: (context, index) {
+                                    return CurrencyItem(
+                                        currencyItem:
+                                            state.pinnedCurrencies[index]!);
+                                  },
+                                ),
+                              ),
                             ),
                             const SizedBox(height: 10),
                           ],
