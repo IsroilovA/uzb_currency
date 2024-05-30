@@ -21,6 +21,10 @@ class PinnedCubit extends Cubit<PinnedState> {
     }
   }
 
+  bool isPinned(CurrencyRate currencyRate) {
+    return _currenciesRepository.isCurrencyPinned(currencyRate);
+  }
+
   Future<void> fetchPinnedCurrencies() async {
     try {
       final pinnedCurrencies =

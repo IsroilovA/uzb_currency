@@ -19,11 +19,15 @@ class CurrencyItem extends StatelessWidget {
       },
       background: Container(
         padding: const EdgeInsets.symmetric(horizontal: 30),
-        color: Colors.blue,
+        color: BlocProvider.of<PinnedCubit>(context).isPinned(currencyItem)
+            ? Colors.red
+            : Colors.blue,
         child: Align(
           alignment: Alignment.centerLeft,
           child: Icon(
-            Icons.push_pin,
+            BlocProvider.of<PinnedCubit>(context).isPinned(currencyItem)
+                ? Icons.remove
+                : Icons.push_pin,
             color: Theme.of(context).colorScheme.background,
           ),
         ),

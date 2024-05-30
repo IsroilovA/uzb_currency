@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uzb_currency/home/cubit/pinned_cubit.dart';
 import 'package:uzb_currency/home/cubit/rates_cubit.dart';
@@ -50,142 +53,177 @@ class _RatesScreenState extends State<RatesScreen> {
               ],
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          BlocBuilder<PinnedCubit, PinnedState>(
-            builder: (context, state) {
-              if (state is PinnedInitial) {
-                BlocProvider.of<PinnedCubit>(context).fetchPinnedCurrencies();
-                return const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                );
-              } else if (state is PinnedRatesFetched) {
-                return ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: state.pinnedCurrencies.length,
-                  itemBuilder: (context, index) {
-                    return CurrencyItem(
-                        currencyItem: state.pinnedCurrencies[index]!);
-                  },
-                );
-              } else if (state is PinnedError) {
-                return Text(
-                  state.message,
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
-                );
-              } else {
-                return const SizedBox();
-              }
-            },
-          ),
-          TextField(
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground,
-                ),
-            onChanged: (value) {
-              BlocProvider.of<RatesCubit>(context).onSearch(value);
-            },
-            decoration: InputDecoration(
-              labelText: 'Search',
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(50)),
-              prefixIcon: const Icon(Icons.search),
-            ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          BlocBuilder<RatesCubit, RatesState>(
-            builder: (context, state) {
-              if (state is RatesInitial) {
-                BlocProvider.of<RatesCubit>(context).fetchData(DateTime.now());
-                return const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                );
-              } else if (state is RatesDataFetched) {
-                return Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: state.currencies.length,
-                    itemBuilder: (context, index) {
-                      return CurrencyItem(
-                          currencyItem: state.currencies[index]!);
-                    },
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    height: 20,
                   ),
-                );
-              } else if (state is RatesBadResponse) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.error,
-                      size: 80,
-                    ),
-                    Text(
-                      'Bad request: status code: ${state.responseCode}',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineSmall!
-                          .copyWith(
-                            color: Theme.of(context).colorScheme.onBackground,
-                          ),
-                    ),
-                    TextButton(
-                        onPressed: () {
-                          BlocProvider.of<RatesCubit>(context)
-                              .fetchData(DateTime.now());
-                        },
-                        child: Text(
-                          'Retry',
+                  BlocBuilder<PinnedCubit, PinnedState>(
+                    builder: (context, state) {
+                      if (state is PinnedInitial) {
+                        BlocProvider.of<PinnedCubit>(context)
+                            .fetchPinnedCurrencies();
+                        return const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        );
+                      } else if (state is PinnedRatesFetched) {
+                        return Column(
+                          children: [
+                            Text(
+                              "Pinned:",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                                  ),
+                            ),
+                            const SizedBox(height: 5),
+                            ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: state.pinnedCurrencies.length,
+                              itemBuilder: (context, index) {
+                                return CurrencyItem(
+                                    currencyItem:
+                                        state.pinnedCurrencies[index]!);
+                              },
+                            ),
+                            const SizedBox(height: 10),
+                          ],
+                        );
+                      } else if (state is PinnedError) {
+                        return Text(
+                          state.message,
                           style: Theme.of(context)
                               .textTheme
-                              .headlineSmall!
+                              .titleMedium!
                               .copyWith(
-                                color: Theme.of(context).colorScheme.primary,
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
                               ),
-                        ))
-                  ],
-                );
-              } else if (state is RatesError) {
-                return Expanded(
-                  child: ListView(
-                    children: [
-                      Text(
-                        state.message,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(
-                              color: Theme.of(context).colorScheme.onBackground,
-                            ),
-                      ),
-                    ],
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    },
                   ),
-                );
-              } else {
-                return Expanded(
-                  child: ListView(
-                    children: [
-                      Text(
-                        "Something went wrong",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(
-                              color: Theme.of(context).colorScheme.onBackground,
-                            ),
-                      ),
-                    ],
+                  TextField(
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
+                    onChanged: (value) {
+                      BlocProvider.of<RatesCubit>(context).onSearch(value);
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Search',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50)),
+                      prefixIcon: const Icon(Icons.search),
+                    ),
                   ),
-                );
-              }
-            },
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  BlocBuilder<RatesCubit, RatesState>(
+                    builder: (context, state) {
+                      if (state is RatesInitial) {
+                        BlocProvider.of<RatesCubit>(context)
+                            .fetchData(DateTime.now());
+                        return const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        );
+                      } else if (state is RatesDataFetched) {
+                        return ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: state.currencies.length,
+                          itemBuilder: (context, index) {
+                            return CurrencyItem(
+                                currencyItem: state.currencies[index]!);
+                          },
+                        );
+                      } else if (state is RatesBadResponse) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.error,
+                              size: 80,
+                            ),
+                            Text(
+                              'Bad request: status code: ${state.responseCode}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall!
+                                  .copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                                  ),
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  BlocProvider.of<RatesCubit>(context)
+                                      .fetchData(DateTime.now());
+                                },
+                                child: Text(
+                                  'Retry',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall!
+                                      .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                ))
+                          ],
+                        );
+                      } else if (state is RatesError) {
+                        return ListView(
+                          children: [
+                            Text(
+                              state.message,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                                  ),
+                            ),
+                          ],
+                        );
+                      } else {
+                        return ListView(
+                          children: [
+                            Text(
+                              "Something went wrong",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                                  ),
+                            ),
+                          ],
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
