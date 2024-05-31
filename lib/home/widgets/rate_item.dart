@@ -33,6 +33,9 @@ class CurrencyItem extends StatelessWidget {
         ),
       ),
       child: Card(
+        color: BlocProvider.of<PinnedCubit>(context).isPinned(currencyItem)
+            ? Theme.of(context).colorScheme.surfaceVariant
+            : null,
         child: Container(
           padding: const EdgeInsets.all(12),
           child: Row(

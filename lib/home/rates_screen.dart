@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -23,20 +25,19 @@ class _RatesScreenState extends State<RatesScreen> {
       padding: const EdgeInsets.all(12),
       child: Column(
         children: [
-          CupertinoSearchTextField(
-            // style: Theme.of(context).textTheme.titleMedium!.copyWith(
-            //       color: Theme.of(context).colorScheme.onBackground,
-            //     ),
-            onChanged: (value) {
-              BlocProvider.of<RatesCubit>(context).onSearch(value);
-            },
-            // decoration: InputDecoration(
-            //   labelText: 'Search',
-            //   border: OutlineInputBorder(
-            //       borderRadius: BorderRadius.circular(50)),
-            //   prefixIcon: const Icon(Icons.search),
-            // ),
-          ),
+          Platform.isIOS
+              ? CupertinoSearchTextField(
+                  onChanged: (value) {
+                    BlocProvider.of<RatesCubit>(context).onSearch(value);
+                  },
+                )
+              : SearchBar(
+                  hintText: "Search",
+                  leading: const Icon(Icons.search),
+                  onChanged: (value) {
+                    BlocProvider.of<RatesCubit>(context).onSearch(value);
+                  },
+                ),
           Container(
             decoration: BoxDecoration(
                 border: Border(
@@ -84,41 +85,14 @@ class _RatesScreenState extends State<RatesScreen> {
                           child: CircularProgressIndicator.adaptive(),
                         );
                       } else if (state is PinnedRatesFetched) {
-                        return Column(
-                          children: [
-                            Text(
-                              "Pinned:",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge!
-                                  .copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onBackground,
-                                  ),
-                            ),
-                            const SizedBox(height: 5),
-                            Card(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
-                              elevation: 2,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: state.pinnedCurrencies.length,
-                                  itemBuilder: (context, index) {
-                                    return CurrencyItem(
-                                        currencyItem:
-                                            state.pinnedCurrencies[index]!);
-                                  },
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                          ],
+                        return ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: state.pinnedCurrencies.length,
+                          itemBuilder: (context, index) {
+                            return CurrencyItem(
+                                currencyItem: state.pinnedCurrencies[index]!);
+                          },
                         );
                       } else if (state is PinnedError) {
                         return Text(
@@ -136,9 +110,7 @@ class _RatesScreenState extends State<RatesScreen> {
                       }
                     },
                   ),
-                  const SizedBox(
-                    height: 8,
-                  ),
+                  const SizedBox(height: 10),
                   BlocBuilder<RatesCubit, RatesState>(
                     builder: (context, state) {
                       if (state is RatesInitial) {
