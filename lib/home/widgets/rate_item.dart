@@ -6,8 +6,10 @@ import 'package:uzb_currency/home/cubit/pinned_cubit.dart';
 import 'package:uzb_currency/service/helper_functions.dart';
 
 class CurrencyItem extends StatelessWidget {
-  const CurrencyItem({super.key, required this.currencyItem});
+  const CurrencyItem(
+      {super.key, required this.currencyItem, this.isPinned = false});
   final CurrencyRate currencyItem;
+  final bool isPinned;
   @override
   Widget build(BuildContext context) {
     return Dismissible(
@@ -33,9 +35,7 @@ class CurrencyItem extends StatelessWidget {
         ),
       ),
       child: Card(
-        color: BlocProvider.of<PinnedCubit>(context).isPinned(currencyItem)
-            ? Theme.of(context).colorScheme.surfaceVariant
-            : null,
+        color: isPinned ? Theme.of(context).colorScheme.surfaceVariant : null,
         child: Container(
           padding: const EdgeInsets.all(12),
           child: Row(

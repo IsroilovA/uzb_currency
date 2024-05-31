@@ -27,6 +27,8 @@ class _RatesScreenState extends State<RatesScreen> {
         children: [
           Platform.isIOS
               ? CupertinoSearchTextField(
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: Theme.of(context).colorScheme.onBackground),
                   onChanged: (value) {
                     BlocProvider.of<RatesCubit>(context).onSearch(value);
                   },
@@ -38,6 +40,7 @@ class _RatesScreenState extends State<RatesScreen> {
                     BlocProvider.of<RatesCubit>(context).onSearch(value);
                   },
                 ),
+          const SizedBox(height: 10),
           Container(
             decoration: BoxDecoration(
                 border: Border(
@@ -74,7 +77,7 @@ class _RatesScreenState extends State<RatesScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   BlocBuilder<PinnedCubit, PinnedState>(
                     builder: (context, state) {
@@ -91,7 +94,9 @@ class _RatesScreenState extends State<RatesScreen> {
                           itemCount: state.pinnedCurrencies.length,
                           itemBuilder: (context, index) {
                             return CurrencyItem(
-                                currencyItem: state.pinnedCurrencies[index]!);
+                              currencyItem: state.pinnedCurrencies[index]!,
+                              isPinned: true,
+                            );
                           },
                         );
                       } else if (state is PinnedError) {
