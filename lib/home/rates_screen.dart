@@ -23,6 +23,20 @@ class _RatesScreenState extends State<RatesScreen> {
       padding: const EdgeInsets.all(12),
       child: Column(
         children: [
+          CupertinoSearchTextField(
+            // style: Theme.of(context).textTheme.titleMedium!.copyWith(
+            //       color: Theme.of(context).colorScheme.onBackground,
+            //     ),
+            onChanged: (value) {
+              BlocProvider.of<RatesCubit>(context).onSearch(value);
+            },
+            // decoration: InputDecoration(
+            //   labelText: 'Search',
+            //   border: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(50)),
+            //   prefixIcon: const Icon(Icons.search),
+            // ),
+          ),
           Container(
             decoration: BoxDecoration(
                 border: Border(
@@ -122,20 +136,6 @@ class _RatesScreenState extends State<RatesScreen> {
                       }
                     },
                   ),
-                  TextField(
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.onBackground,
-                        ),
-                    onChanged: (value) {
-                      BlocProvider.of<RatesCubit>(context).onSearch(value);
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Search',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50)),
-                      prefixIcon: const Icon(Icons.search),
-                    ),
-                  ),
                   const SizedBox(
                     height: 8,
                   ),
@@ -196,36 +196,26 @@ class _RatesScreenState extends State<RatesScreen> {
                           ],
                         );
                       } else if (state is RatesError) {
-                        return ListView(
-                          children: [
-                            Text(
-                              state.message,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onBackground,
-                                  ),
-                            ),
-                          ],
+                        return Text(
+                          state.message,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
+                              ),
                         );
                       } else {
-                        return ListView(
-                          children: [
-                            Text(
-                              "Something went wrong",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onBackground,
-                                  ),
-                            ),
-                          ],
+                        return Text(
+                          "Something went wrong",
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
+                              ),
                         );
                       }
                     },
