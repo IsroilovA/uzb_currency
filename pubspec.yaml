@@ -52,6 +52,13 @@ dependencies:
   hive_flutter: ^1.1.0
   connectivity_plus: ^6.0.3
   get_it: ^7.7.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
+  remove_alpha_ios: true
 
 dev_dependencies:
   flutter_test:
