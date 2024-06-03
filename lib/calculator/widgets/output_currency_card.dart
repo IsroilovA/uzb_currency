@@ -87,7 +87,7 @@ class OutputCurrencyCard extends StatelessWidget {
                   }
                   return Text(
                     softWrap: true,
-                    currencyFormat(convertedAmount.toStringAsFixed(3)),
+                    currencyFormat(convertedAmount.toStringAsFixed(2)),
                     style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                         color: Theme.of(context).colorScheme.onBackground),
                   );
