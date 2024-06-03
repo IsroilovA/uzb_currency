@@ -90,7 +90,6 @@ class _RatesScreenState extends State<RatesScreen> {
             ),
             Expanded(
               child: Stack(
-                alignment: Alignment.bottomRight,
                 children: [
                   SingleChildScrollView(
                     controller: _homeController,
@@ -225,20 +224,24 @@ class _RatesScreenState extends State<RatesScreen> {
                       ],
                     ),
                   ),
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 200),
-                    child: scrollPosition <= 100
-                        ? const SizedBox()
-                        : FloatingActionButton(
-                            onPressed: () {
-                              _homeController.animateTo(
-                                0.0,
-                                curve: Curves.easeOut,
-                                duration: const Duration(milliseconds: 300),
-                              );
-                            },
-                            child: const Icon(Icons.arrow_upward),
-                          ),
+                  Positioned(
+                    right: 0,
+                    bottom: 5,
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 200),
+                      child: scrollPosition <= 100
+                          ? const SizedBox()
+                          : FloatingActionButton(
+                              onPressed: () {
+                                _homeController.animateTo(
+                                  0.0,
+                                  curve: Curves.easeOut,
+                                  duration: const Duration(milliseconds: 300),
+                                );
+                              },
+                              child: const Icon(Icons.arrow_upward),
+                            ),
+                    ),
                   ),
                 ],
               ),
