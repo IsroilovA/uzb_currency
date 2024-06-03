@@ -31,6 +31,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               // to make it scrollable when it grows
               child: SingleChildScrollView(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
                   children: [
                     InputCurrencyCard(
                       onCurrencyChanged: (currency) {
