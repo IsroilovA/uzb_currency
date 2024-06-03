@@ -27,6 +27,7 @@ class PinnedCubit extends Cubit<PinnedState> {
 
   Future<void> fetchPinnedCurrencies() async {
     try {
+      emit(PinnedInitial());
       final pinnedCurrencies =
           await _currenciesRepository.fetchPinnedCurrencies();
       if (pinnedCurrencies.isNotEmpty) {

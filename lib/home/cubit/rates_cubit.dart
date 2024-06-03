@@ -40,19 +40,6 @@ class RatesCubit extends Cubit<RatesState> {
             await _currenciesRepository.getCurrencies(date: DateTime.now());
         await _currenciesRepository.saveCurrenciesLocally(serverResponse);
         currencies = await _currenciesRepository.fetchAllLocalCurrencies();
-        // currencies.sort(
-        //   (a, b) {
-        //     if (_currenciesRepository.isCurrencyPinned(a!) &&
-        //         _currenciesRepository.isCurrencyPinned(b!)) {
-        //       return 0;
-        //     } else if (_currenciesRepository.isCurrencyPinned(a) &&
-        //         !_currenciesRepository.isCurrencyPinned(b!)) {
-        //       return -1;
-        //     } else {
-        //       return 1;
-        //     }
-        //   },
-        // );
         emit(RatesDataFetched(currencies));
       } else {
         currencies = await _currenciesRepository.fetchAllLocalCurrencies();

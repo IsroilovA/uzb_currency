@@ -22,7 +22,8 @@ class CurrenciesRepository {
   Future<List<CurrencyRate>> getCurrencies(
       {required DateTime date, String? currency}) async {
     //fromat date to insert into the link
-    final formattedDate = dateFormatter.format(date);
+    final formattedDate =
+        dateFormatter.format(date.add(const Duration(days: 1)));
     //variable to hold the response
     final http.Response response;
     //ckeck if currency was passed and insert if needed

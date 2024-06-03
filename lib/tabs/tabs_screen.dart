@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uzb_currency/calculator/calculator_screen.dart';
+import 'package:uzb_currency/home/cubit/pinned_cubit.dart';
 import 'package:uzb_currency/home/cubit/rates_cubit.dart';
 import 'package:uzb_currency/home/rates_screen.dart';
 import 'package:uzb_currency/tabs/cubit/tabs_cubit.dart';
@@ -29,8 +30,10 @@ class _TabsScreenState extends State<TabsScreen> {
         centerTitle: true,
       ),
       body: RefreshIndicator.adaptive(
-        onRefresh: () =>
-            BlocProvider.of<RatesCubit>(context).fetchData(DateTime.now()),
+        onRefresh: () {
+          BlocProvider.of<RatesCubit>(context).fetchData(DateTime.now());
+          return BlocProvider.of<PinnedCubit>(context).fetchPinnedCurrencies();
+        },
         child: BlocBuilder<TabsCubit, TabsState>(
           buildWhen: (previous, current) {
             if (current is TabsPageChanged) {
