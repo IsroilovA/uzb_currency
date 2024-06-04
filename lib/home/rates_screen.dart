@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uzb_currency/home/cubit/pinned_cubit.dart';
 import 'package:uzb_currency/home/cubit/rates_cubit.dart';
@@ -230,7 +228,7 @@ class _RatesScreenState extends State<RatesScreen> {
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 200),
                       child: scrollPosition <= 100
-                          ? const SizedBox()
+                          ? null
                           : FloatingActionButton(
                               onPressed: () {
                                 _homeController.animateTo(
