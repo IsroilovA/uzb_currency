@@ -41,7 +41,7 @@ class OutputCurrencyCard extends StatelessWidget {
                   Text(
                     currencyConvertedTo,
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.onBackground),
+                        color: Theme.of(context).colorScheme.onSurface),
                   ),
                 ],
               ),
@@ -89,7 +89,7 @@ class OutputCurrencyCard extends StatelessWidget {
                     softWrap: true,
                     currencyFormat(convertedAmount.toStringAsFixed(2)),
                     style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.onBackground),
+                        color: Theme.of(context).colorScheme.onSurface),
                   );
                 } else if (state is RatesInitial) {
                   return const Center(
@@ -98,7 +98,7 @@ class OutputCurrencyCard extends StatelessWidget {
                   return Center(
                     child: Text("Something went wrong",
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: Theme.of(context).colorScheme.onBackground)),
+                            color: Theme.of(context).colorScheme.onSurface)),
                   );
                 }
               },

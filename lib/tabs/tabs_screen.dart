@@ -48,7 +48,7 @@ class _TabsScreenState extends State<TabsScreen> {
               child: Text(
                 "Error: ${state.message}",
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
               ),
             );
@@ -61,7 +61,7 @@ class _TabsScreenState extends State<TabsScreen> {
         onTap: BlocProvider.of<TabsCubit>(context).selectPage,
         currentIndex: selectedTab,
         selectedItemColor: Theme.of(context).colorScheme.primary,
-        unselectedItemColor: Theme.of(context).colorScheme.onBackground,
+        unselectedItemColor: Theme.of(context).colorScheme.onSurface,
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
         items: const [

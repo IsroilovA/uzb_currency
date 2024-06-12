@@ -39,7 +39,7 @@ class InputCurrencyCard extends StatelessWidget {
                   Text(
                     currency,
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.onBackground),
+                        color: Theme.of(context).colorScheme.onSurface),
                   ),
                 ],
               ),
@@ -53,7 +53,7 @@ class InputCurrencyCard extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .headlineLarge!
-                  .copyWith(color: Theme.of(context).colorScheme.onBackground),
+                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
             ),
           ],
         ),

@@ -30,12 +30,14 @@ class CurrencyItem extends StatelessWidget {
             BlocProvider.of<PinnedCubit>(context).isPinned(currencyItem)
                 ? Icons.remove
                 : Icons.push_pin,
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
           ),
         ),
       ),
       child: Card(
-        color: isPinned ? Theme.of(context).colorScheme.surfaceVariant : null,
+        color: isPinned
+            ? Theme.of(context).colorScheme.surfaceContainerHighest
+            : null,
         child: Container(
           padding: const EdgeInsets.all(12),
           child: Row(
@@ -56,7 +58,7 @@ class CurrencyItem extends StatelessWidget {
                   Text(
                     currencyItem.currency,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.onBackground,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                   ),
                 ],
@@ -64,7 +66,7 @@ class CurrencyItem extends StatelessWidget {
               Text(
                 currencyFormat(currencyItem.rate.toString()),
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
               ),
               Text(

@@ -43,7 +43,7 @@ class _RatesScreenState extends State<RatesScreen> {
             Platform.isIOS
                 ? CupertinoSearchTextField(
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.onBackground),
+                        color: Theme.of(context).colorScheme.onSurface),
                     onChanged: (value) {
                       BlocProvider.of<RatesCubit>(context).onSearch(value);
                     },
@@ -61,26 +61,26 @@ class _RatesScreenState extends State<RatesScreen> {
                   border: Border(
                       bottom: BorderSide(
                           width: 2,
-                          color: Theme.of(context).colorScheme.onBackground))),
+                          color: Theme.of(context).colorScheme.onSurface))),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
                     "Currency",
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.onBackground,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                   ),
                   Text(
                     "Rate",
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.onBackground,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                   ),
                   Text(
                     "Diff",
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.onBackground,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                   ),
                 ],
@@ -100,6 +100,8 @@ class _RatesScreenState extends State<RatesScreen> {
                         BlocBuilder<PinnedCubit, PinnedState>(
                           builder: (context, state) {
                             if (state is PinnedInitial) {
+                              BlocProvider.of<RatesCubit>(context)
+                                  .fetchData(DateTime.now());
                               BlocProvider.of<PinnedCubit>(context)
                                   .fetchPinnedCurrencies();
                               return const Center(
@@ -127,7 +129,7 @@ class _RatesScreenState extends State<RatesScreen> {
                                     .copyWith(
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onBackground,
+                                          .onSurface,
                                     ),
                               );
                             } else {
@@ -171,7 +173,7 @@ class _RatesScreenState extends State<RatesScreen> {
                                         .copyWith(
                                           color: Theme.of(context)
                                               .colorScheme
-                                              .onBackground,
+                                              .onSurface,
                                         ),
                                   ),
                                   TextButton(
@@ -201,7 +203,7 @@ class _RatesScreenState extends State<RatesScreen> {
                                     .copyWith(
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onBackground,
+                                          .onSurface,
                                     ),
                               );
                             } else {
@@ -213,7 +215,7 @@ class _RatesScreenState extends State<RatesScreen> {
                                     .copyWith(
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onBackground,
+                                          .onSurface,
                                     ),
                               );
                             }
