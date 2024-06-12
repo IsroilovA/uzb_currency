@@ -17,13 +17,20 @@ class RatesScreen extends StatefulWidget {
 }
 
 class _RatesScreenState extends State<RatesScreen> {
-  final ScrollController _homeController = ScrollController();
+  final ScrollController _homeScrollController = ScrollController();
   double scrollPosition = 0.0;
+
+  @override
+  void dispose() {
+    _homeScrollController.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
-    _homeController.addListener(() {
+    _homeScrollController.addListener(() {
       setState(() {
-        scrollPosition = _homeController.offset;
+        scrollPosition = _homeScrollController.offset;
       });
     });
     super.initState();
@@ -90,7 +97,7 @@ class _RatesScreenState extends State<RatesScreen> {
               child: Stack(
                 children: [
                   SingleChildScrollView(
-                    controller: _homeController,
+                    controller: _homeScrollController,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -242,7 +249,7 @@ class _RatesScreenState extends State<RatesScreen> {
                           ? null
                           : FloatingActionButton(
                               onPressed: () {
-                                _homeController.animateTo(
+                                _homeScrollController.animateTo(
                                   0.0,
                                   curve: Curves.easeOut,
                                   duration: const Duration(milliseconds: 300),
