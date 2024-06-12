@@ -19,6 +19,11 @@ class RatesScreen extends StatefulWidget {
 class _RatesScreenState extends State<RatesScreen> {
   final ScrollController _homeController = ScrollController();
   double scrollPosition = 0.0;
+
+  void fetchData() async {
+    await BlocProvider.of<RatesCubit>(context).fetchData(DateTime.now());
+  }
+
   @override
   void initState() {
     _homeController.addListener(() {
@@ -26,6 +31,7 @@ class _RatesScreenState extends State<RatesScreen> {
         scrollPosition = _homeController.offset;
       });
     });
+    fetchData();
     super.initState();
   }
 
@@ -97,40 +103,50 @@ class _RatesScreenState extends State<RatesScreen> {
                         const SizedBox(
                           height: 15,
                         ),
-                        BlocBuilder<PinnedCubit, PinnedState>(
+                        BlocBuilder<RatesCubit, RatesState>(
                           builder: (context, state) {
-                            if (state is PinnedInitial) {
-                              BlocProvider.of<RatesCubit>(context)
-                                  .fetchData(DateTime.now());
-                              BlocProvider.of<PinnedCubit>(context)
-                                  .fetchPinnedCurrencies();
-                              return const Center(
-                                child: CircularProgressIndicator.adaptive(),
-                              );
-                            } else if (state is PinnedRatesFetched) {
-                              return ListView.builder(
-                                physics: const NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: state.pinnedCurrencies.length,
-                                itemBuilder: (context, index) {
-                                  return CurrencyItem(
-                                    currencyItem:
-                                        state.pinnedCurrencies[index]!,
-                                    isPinned: true,
-                                  );
+                            //fetch pinned currency only after the info was updated
+                            if (state is RatesDataFetched) {
+                              return BlocBuilder<PinnedCubit, PinnedState>(
+                                builder: (context, state) {
+                                  if (state is PinnedInitial) {
+                                    fetchData();
+                                    BlocProvider.of<PinnedCubit>(context)
+                                        .fetchPinnedCurrencies();
+                                    return const Center(
+                                      child:
+                                          CircularProgressIndicator.adaptive(),
+                                    );
+                                  } else if (state is PinnedRatesFetched) {
+                                    return ListView.builder(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: state.pinnedCurrencies.length,
+                                      itemBuilder: (context, index) {
+                                        return CurrencyItem(
+                                          currencyItem:
+                                              state.pinnedCurrencies[index]!,
+                                          isPinned: true,
+                                        );
+                                      },
+                                    );
+                                  } else if (state is PinnedError) {
+                                    return Text(
+                                      state.message,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface,
+                                          ),
+                                    );
+                                  } else {
+                                    return const SizedBox();
+                                  }
                                 },
-                              );
-                            } else if (state is PinnedError) {
-                              return Text(
-                                state.message,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                    ),
                               );
                             } else {
                               return const SizedBox();
