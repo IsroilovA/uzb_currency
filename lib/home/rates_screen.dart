@@ -19,11 +19,6 @@ class RatesScreen extends StatefulWidget {
 class _RatesScreenState extends State<RatesScreen> {
   final ScrollController _homeController = ScrollController();
   double scrollPosition = 0.0;
-
-  void fetchData() async {
-    await BlocProvider.of<RatesCubit>(context).fetchData(DateTime.now());
-  }
-
   @override
   void initState() {
     _homeController.addListener(() {
@@ -31,7 +26,6 @@ class _RatesScreenState extends State<RatesScreen> {
         scrollPosition = _homeController.offset;
       });
     });
-    fetchData();
     super.initState();
   }
 
@@ -110,7 +104,6 @@ class _RatesScreenState extends State<RatesScreen> {
                               return BlocBuilder<PinnedCubit, PinnedState>(
                                 builder: (context, state) {
                                   if (state is PinnedInitial) {
-                                    fetchData();
                                     BlocProvider.of<PinnedCubit>(context)
                                         .fetchPinnedCurrencies();
                                     return const Center(
